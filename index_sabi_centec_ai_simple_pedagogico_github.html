@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SABI AI CENTEC CALI</title>
+<meta name="description" content="SABI AI CENTEC CALI: tutor digital pedagógico para resolver dudas, explicar conceptos y fortalecer aprendizaje significativo." />
+<meta name="theme-color" content="#082b63" />
+
+<style>
+:root{
+  --azul:#082b63;
+  --azul2:#0f4c81;
+  --naranja:#f28c28;
+  --amarillo:#ffd166;
+  --fondo:#f4f8ff;
+  --texto:#1d2939;
+  --gris:#eef2f7;
+  --borde:#d8e2ee;
+  --blanco:#ffffff;
+  --sombra:0 14px 40px rgba(0,0,0,.10);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:linear-gradient(135deg,#eef5ff,#fff9ef);
+  color:var(--texto);
+  min-height:100vh;
+}
+
+/* ================= HEADER COMPACTO ================= */
+
+.sabi-header{
+  background:linear-gradient(135deg,var(--azul),var(--azul2));
+  color:white;
+  padding:18px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  box-shadow:var(--sombra);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-width:0;
+}
+
+.avatar-top{
+  width:76px;
+  height:76px;
+  border-radius:50%;
+  overflow:hidden;
+  background:white;
+  border:4px solid rgba(255,255,255,.35);
+  box-shadow:0 8px 24px rgba(0,0,0,.22);
+  flex:0 0 auto;
+}
+
+.avatar-top img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.brand-text h1{
+  font-size:clamp(1.25rem,3vw,2rem);
+  font-weight:900;
+  letter-spacing:.3px;
+  line-height:1.1;
+}
+
+.brand-text p{
+  margin-top:5px;
+  color:var(--amarillo);
+  font-weight:700;
+  font-size:.95rem;
+}
+
+.battle-phrase{
+  max-width:520px;
+  background:rgba(255,255,255,.13);
+  border-left:5px solid var(--naranja);
+  border-radius:16px;
+  padding:10px 14px;
+  font-weight:800;
+  line-height:1.35;
+  font-size:.95rem;
+}
+
+/* ================= LAYOUT ================= */
+
+.app{
+  max-width:1120px;
+  margin:18px auto 32px;
+  padding:0 14px;
+}
+
+.hero{
+  background:rgba(255,255,255,.92);
+  border:1px solid var(--borde);
+  border-radius:24px;
+  padding:18px 20px;
+  box-shadow:var(--sombra);
+  margin-bottom:16px;
+}
+
+.hero h2{
+  color:var(--azul);
+  font-size:1.35rem;
+  margin-bottom:8px;
+}
+
+.hero p{
+  line-height:1.55;
+  font-size:1rem;
+}
+
+.quick-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:14px;
+}
+
+.chip{
+  border:none;
+  background:#eef5ff;
+  color:var(--azul);
+  border:1px solid #cfe0f5;
+  padding:9px 12px;
+  border-radius:999px;
+  cursor:pointer;
+  font-weight:800;
+  transition:.18s;
+}
+
+.chip:hover{
+  background:#dfeeff;
+  transform:translateY(-1px);
+}
+
+.chat-card{
+  background:white;
+  border:1px solid var(--borde);
+  border-radius:24px;
+  box-shadow:var(--sombra);
+  overflow:hidden;
+  min-height:650px;
+  display:flex;
+  flex-direction:column;
+}
+
+.chat-title{
+  padding:14px 18px;
+  background:#f7fbff;
+  border-bottom:1px solid var(--borde);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.chat-title h3{
+  color:var(--azul);
+  font-size:1.08rem;
+}
+
+.status{
+  font-size:.84rem;
+  font-weight:800;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#e6f4ea;
+  color:#155724;
+}
+
+.messages{
+  flex:1;
+  padding:18px;
+  background:#fcfdff;
+  overflow-y:auto;
+  max-height:590px;
+}
+
+.message{
+  margin-bottom:14px;
+  padding:14px 16px;
+  border-radius:18px;
+  line-height:1.58;
+  white-space:pre-wrap;
+  font-size:1rem;
+}
+
+.user{
+  background:#e8f1ff;
+  border:1px solid #bfd7ff;
+  margin-left:10%;
+}
+
+.sabi{
+  background:#fff8ee;
+  border:1px solid #ffd79d;
+  margin-right:4%;
+  position:relative;
+  padding-left:58px;
+}
+
+.sabi-logo-mini{
+  position:absolute;
+  top:13px;
+  left:14px;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  overflow:hidden;
+  border:2px solid #fff;
+  box-shadow:0 4px 12px rgba(0,0,0,.14);
+  background:white;
+}
+
+.sabi-logo-mini img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.input-area{
+  border-top:1px solid var(--borde);
+  padding:14px 16px 16px;
+  background:white;
+}
+
+textarea{
+  width:100%;
+  min-height:112px;
+  border-radius:18px;
+  border:1px solid var(--borde);
+  padding:15px 16px;
+  font-size:1rem;
+  font-family:inherit;
+  resize:vertical;
+  outline:none;
+  line-height:1.5;
+}
+
+textarea:focus{
+  border-color:var(--azul2);
+  box-shadow:0 0 0 3px rgba(15,76,129,.12);
+}
+
+.input-buttons{
+  display:grid;
+  grid-template-columns:1fr 180px;
+  gap:10px;
+  margin-top:10px;
+}
+
+button.main-btn{
+  border:none;
+  border-radius:16px;
+  padding:14px;
+  color:white;
+  font-weight:900;
+  font-size:1rem;
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--azul2),var(--azul));
+  transition:.18s;
+}
+
+button.main-btn:hover{transform:translateY(-1px);opacity:.95}
+
+button.clear-btn{
+  border:none;
+  border-radius:16px;
+  padding:14px;
+  color:var(--azul);
+  font-weight:900;
+  cursor:pointer;
+  background:#edf3fa;
+}
+
+.footer-note{
+  text-align:center;
+  color:#52606d;
+  font-size:.84rem;
+  margin-top:10px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:850px){
+  .sabi-header{
+    align-items:flex-start;
+    flex-direction:column;
+    padding:14px;
+  }
+
+  .battle-phrase{
+    max-width:100%;
+    font-size:.88rem;
+  }
+
+  .avatar-top{
+    width:58px;
+    height:58px;
+  }
+
+  .hero{
+    padding:15px;
+  }
+
+  .input-buttons{
+    grid-template-columns:1fr;
+  }
+
+  .user{
+    margin-left:0;
+  }
+
+  .sabi{
+    margin-right:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="sabi-header">
+  <div class="brand">
+    <div class="avatar-top">
+      <img src="avatar-sabi.png" alt="Avatar SABI CENTEC" onerror="this.style.display='none'; this.parentElement.innerHTML='<strong style=&quot;color:#082b63;font-size:.9rem;&quot;>SABI</strong>';" />
+    </div>
+    <div class="brand-text">
+      <h1>SABI AI CENTEC CALI</h1>
+      <p>Saber • Aprender • Brillar • Imaginar</p>
+    </div>
+  </div>
+
+  <div class="battle-phrase">
+    “El error no nos detiene. Nos enseña, nos fortalece y nos hace crecer.”
+  </div>
+</header>
+
+<main class="app">
+
+  <section class="hero">
+    <h2>Haz tu pregunta. SABI te ayuda a comprender.</h2>
+    <p>
+      Escribe cualquier duda, concepto o necesidad. SABI responderá de forma clara, correcta, humana y pedagógica:
+      explicará el concepto, usará ejemplos, corregirá confusiones y propondrá un pequeño reto para verificar comprensión.
+    </p>
+
+    <div class="quick-actions">
+      <button class="chip" onclick="usarEjemplo('Explícame qué es la fotosíntesis desde cero, con un ejemplo fácil.')">Fotosíntesis</button>
+      <button class="chip" onclick="usarEjemplo('No entiendo las fracciones. Explícame paso a paso.')">Fracciones</button>
+      <button class="chip" onclick="usarEjemplo('Ayúdame a mejorar mi comprensión lectora.')">Comprensión lectora</button>
+      <button class="chip" onclick="usarEjemplo('¿Cuál es la capital de Italia?')">Pregunta directa</button>
+    </div>
+  </section>
+
+  <section class="chat-card">
+    <div class="chat-title">
+      <h3>Tutor digital pedagógico</h3>
+      <span class="status" id="status">En línea</span>
+    </div>
+
+    <div class="messages" id="messages"></div>
+
+    <div class="input-area">
+      <textarea id="pregunta" placeholder="Escribe aquí tu pregunta. Ejemplo: ¿Cuál es la capital de Italia? / No entiendo las fracciones / Ayúdame a preparar una clase significativa."></textarea>
+      <div class="input-buttons">
+        <button class="main-btn" onclick="consultarSabi()">Consultar a SABI</button>
+        <button class="clear-btn" onclick="limpiarConversacion()">Limpiar</button>
+      </div>
+      <div class="footer-note">
+        SABI orienta y explica. Para respuestas con información actualizada, debe conectarse a un modelo de IA o fuente web.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+const mensajes = document.getElementById('messages');
+const preguntaInput = document.getElementById('pregunta');
+const memoryKey = 'sabi_centec_chat_v3';
+
+const promptMaestro = `
+Actúa como SABI CENTEC CALI AI: tutor pedagógico inteligente, humano, cálido, espiritual, motivador, exigente y riguroso.
+Tu objetivo no es solo responder; es garantizar comprensión real.
+Responde de forma correcta, clara y directa. Si la pregunta es factual y simple, responde primero la respuesta correcta, sin rodeos.
+Luego, si aporta valor, explica brevemente, da un ejemplo y propone una comprobación de comprensión.
+Filosofía central: “El error no nos detiene. Nos enseña, nos fortalece y nos hace crecer.”
+Nunca inventes información. Si no sabes, dilo y orienta cómo verificar.
+`;
+
+function guardarConversacion(){
+  localStorage.setItem(memoryKey, mensajes.innerHTML);
+}
+
+function cargarConversacion(){
+  const data = localStorage.getItem(memoryKey);
+  if(data){ mensajes.innerHTML = data; }
+}
+
+function agregarMensaje(tipo, texto){
+  const div = document.createElement('div');
+  div.className = `message ${tipo}`;
+
+  if(tipo === 'sabi'){
+    const logo = document.createElement('div');
+    logo.className = 'sabi-logo-mini';
+    logo.innerHTML = `<img src="avatar-sabi.png" alt="SABI" onerror="this.parentElement.textContent='S'; this.parentElement.style.display='flex'; this.parentElement.style.alignItems='center'; this.parentElement.style.justifyContent='center'; this.parentElement.style.fontWeight='900'; this.parentElement.style.color='#082b63';">`;
+    div.appendChild(logo);
+  }
+
+  const content = document.createElement('div');
+  content.textContent = texto;
+  div.appendChild(content);
+
+  mensajes.appendChild(div);
+  mensajes.scrollTop = mensajes.scrollHeight;
+  guardarConversacion();
+}
+
+function usarEjemplo(texto){
+  preguntaInput.value = texto;
+  preguntaInput.focus();
+}
+
+function limpiarConversacion(){
+  if(confirm('¿Deseas limpiar la conversación de esta pantalla?')){
+    mensajes.innerHTML = '';
+    localStorage.removeItem(memoryKey);
+    bienvenida();
+  }
+}
+
+function detectarPreguntaDirecta(q){
+  const s = q.toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/[¿?.,;]/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+
+  // Corrección de confusión común: "capital de Roma"
+  if(s.includes('capital de roma')){
+    return `La pregunta tiene una confusión importante.
+
+Roma no es un país: Roma es una ciudad.
+
+La respuesta correcta sería:
+Roma es la capital de Italia.
+
+Explicación breve:
+Italia es el país.
+Roma es su ciudad capital.
+
+Reto de comprensión:
+Ahora responde tú: ¿cuál es el país y cuál es la ciudad capital en esta oración: “Bogotá es la capital de Colombia”?`;
+  }
+
+  if(s.includes('capital de italia') || s.includes('cual es la capital de italia')){
+    return `La capital de Italia es Roma.
+
+Explicación breve:
+Italia es el país y Roma es su ciudad capital.
+
+Reto de comprensión:
+Escribe una oración similar usando Colombia y Bogotá.`;
+  }
+
+  if(s.includes('capital de colombia')){
+    return `La capital de Colombia es Bogotá.
+
+Explicación breve:
+Colombia es el país y Bogotá es su ciudad capital.
+
+Reto de comprensión:
+Ahora intenta decirlo al revés correctamente: Bogotá es la capital de ________.`;
+  }
+
+  return null;
+}
+
+function construirRespuestaPedagogica(pregunta){
+  const directa = detectarPreguntaDirecta(pregunta);
+  if(directa) return directa;
+
+  const tema = extraerTema(pregunta);
+
+  return `Excelente pregunta.
+
+Voy a ayudarte como tutor pedagógico: primero aclaramos el concepto, luego lo conectamos con un ejemplo y finalmente verificamos si realmente quedó comprendido.
+
+Pregunta:
+“${pregunta}”
+
+1. Respuesta inicial
+El tema central parece ser: ${tema}.
+Para aprenderlo bien, no basta con memorizar una frase. Debemos comprender qué significa, para qué sirve y cómo se aplica.
+
+2. Explicación clara
+Un concepto se entiende mejor cuando lo dividimos en partes:
+• idea principal,
+• ejemplo,
+• aplicación,
+• comprobación.
+
+3. Ejemplo sencillo
+Imagina que este tema fuera una herramienta. Una herramienta solo sirve cuando sabes:
+• cómo se llama,
+• para qué sirve,
+• cuándo usarla,
+• y qué error debes evitar.
+
+4. Pregunta de reflexión
+¿Qué parte de este tema te causa más duda: el significado, el procedimiento, el ejemplo o la aplicación?
+
+5. Reto de aprendizaje
+Intenta explicarlo ahora con tus propias palabras en 3 líneas.
+Si te equivocas, no pasa nada: el error no nos detiene, nos enseña, nos fortalece y nos hace crecer.
+
+6. Siguiente paso
+Respóndeme con tu intento de explicación y yo te ayudaré a corregirlo, mejorarlo y llevarlo a una comprensión más profunda.`;
+}
+
+function extraerTema(q){
+  let limpio = q.trim();
+  limpio = limpio.replace(/^expl[ií]came\s+/i,'');
+  limpio = limpio.replace(/^no entiendo\s+/i,'');
+  limpio = limpio.replace(/^qu[eé]\s+es\s+/i,'');
+  limpio = limpio.replace(/[¿?]/g,'');
+  if(limpio.length > 70) limpio = limpio.slice(0,70) + '...';
+  return limpio || 'el concepto que estás consultando';
+}
+
+function consultarSabi(){
+  const pregunta = preguntaInput.value.trim();
+
+  if(!pregunta){
+    agregarMensaje('sabi','Escribe tu pregunta. SABI está diseñado para ayudarte a comprender paso a paso.');
+    return;
+  }
+
+  agregarMensaje('user', pregunta);
+
+  const respuesta = construirRespuestaPedagogica(pregunta);
+  agregarMensaje('sabi', respuesta);
+
+  preguntaInput.value = '';
+  preguntaInput.focus();
+}
+
+function bienvenida(){
+  agregarMensaje('sabi',
+`Bienvenido a SABI AI CENTEC CALI.
+
+Haz una pregunta natural, como lo harías con un maestro:
+• ¿Qué es una fracción?
+• ¿Cuál es la capital de Italia?
+• No entiendo la fotosíntesis.
+• Ayúdame a preparar una clase.
+
+Responderé con claridad, precisión y pedagogía.
+
+Recuerda:
+“El error no nos detiene. Nos enseña, nos fortalece y nos hace crecer.”`);
+}
+
+function actualizarEstado(){
+  const status = document.getElementById('status');
+  if(navigator.onLine){
+    status.textContent = 'En línea';
+    status.style.background = '#e6f4ea';
+    status.style.color = '#155724';
+  }else{
+    status.textContent = 'Sin conexión';
+    status.style.background = '#fff3cd';
+    status.style.color = '#856404';
+  }
+}
+
+preguntaInput.addEventListener('keydown', function(e){
+  if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)){
+    consultarSabi();
+  }
+});
+
+window.addEventListener('online', actualizarEstado);
+window.addEventListener('offline', actualizarEstado);
+
+cargarConversacion();
+if(!mensajes.innerHTML.trim()) bienvenida();
+actualizarEstado();
+
+// Service Worker básico para funcionamiento tipo PWA/offline simple.
+if('serviceWorker' in navigator){
+  const swCode = `
+    const CACHE_NAME='sabi-centec-v3';
+    self.addEventListener('install', e=>{
+      e.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(['./'])));
+    });
+    self.addEventListener('fetch', e=>{
+      e.respondWith(caches.match(e.request).then(resp=>resp || fetch(e.request).catch(()=>resp)));
+    });
+  `;
+  const blob = new Blob([swCode], {type:'text/javascript'});
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(()=>{});
+}
+</script>
+
+</body>
+</html>
