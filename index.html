@@ -5,105 +5,72 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>SABI AI CENTEC CALI</title>
 <style>
-:root{
---azul:#082b63;
---naranja:#f28c28;
---gris:#eef2f7;
-}
-*{box-sizing:border-box;margin:0;padding:0}
 body{
-font-family:Arial,Helvetica,sans-serif;
+margin:0;
+font-family:Arial,sans-serif;
 background:#f4f7fb;
 color:#1e293b;
 }
 header{
-background:var(--azul);
+background:#082b63;
 color:white;
-padding:10px 16px;
+padding:10px 15px;
 display:flex;
-justify-content:space-between;
 align-items:center;
+justify-content:space-between;
 gap:10px;
-position:sticky;
-top:0;
-z-index:10;
 }
 .logo{
 display:flex;
 align-items:center;
-gap:12px;
+gap:10px;
 }
-.avatar{
-width:56px;
-height:56px;
+.logo img{
+width:55px;
+height:55px;
 border-radius:50%;
-overflow:hidden;
 background:white;
-flex-shrink:0;
-}
-.avatar img{
-width:100%;
-height:100%;
 object-fit:cover;
-display:block;
 }
 h1{
-font-size:2rem;
-font-weight:900;
-}
-.sub{
-color:#ffd166;
-font-size:.9rem;
-font-weight:700;
+margin:0;
+font-size:1.7rem;
 }
 .frase{
-border-left:4px solid var(--naranja);
+font-weight:bold;
+border-left:4px solid orange;
 padding-left:10px;
-font-weight:700;
-max-width:450px;
-}
-main{
-max-width:1100px;
-margin:12px auto;
-padding:0 12px 20px;
+max-width:420px;
 }
 .chat{
+max-width:1100px;
+margin:10px auto;
 background:white;
-border-radius:18px;
+border-radius:14px;
 overflow:hidden;
-box-shadow:0 4px 18px rgba(0,0,0,.08);
-border:1px solid #dbe3ef;
-}
-.top{
-padding:12px 16px;
-background:#f7f9fc;
-border-bottom:1px solid #dbe3ef;
-font-weight:800;
-color:var(--azul);
+box-shadow:0 4px 16px rgba(0,0,0,.08);
 }
 #messages{
-height:58vh;
+height:65vh;
 overflow-y:auto;
-padding:16px;
-background:white;
+padding:15px;
 }
-.message{
+.msg{
 padding:14px;
 border-radius:14px;
 margin-bottom:12px;
-line-height:1.6;
 white-space:pre-wrap;
-font-size:1rem;
+line-height:1.6;
 }
 .user{
 background:#e8f1ff;
 margin-left:12%;
 }
 .sabi{
-background:#fff7eb;
+background:#fff7e8;
 border:1px solid #ffd18f;
 position:relative;
-padding-left:54px;
+padding-left:55px;
 }
 .mini{
 position:absolute;
@@ -122,22 +89,16 @@ object-fit:cover;
 }
 .input{
 padding:14px;
-border-top:1px solid #dbe3ef;
-background:white;
+border-top:1px solid #ddd;
 }
 textarea{
 width:100%;
-min-height:95px;
-border-radius:14px;
-border:1px solid #cbd5e1;
+min-height:90px;
 padding:14px;
 font-size:1rem;
-font-family:inherit;
+border-radius:12px;
+border:1px solid #cbd5e1;
 resize:vertical;
-outline:none;
-}
-textarea:focus{
-border-color:var(--azul);
 }
 .actions{
 display:grid;
@@ -146,35 +107,24 @@ gap:10px;
 margin-top:10px;
 }
 button{
-border:none;
-border-radius:14px;
 padding:14px;
+border:none;
+border-radius:12px;
+font-weight:bold;
 cursor:pointer;
-font-weight:900;
 font-size:1rem;
 }
 .send{
-background:var(--azul);
+background:#082b63;
 color:white;
 }
 .new{
 background:#e2e8f0;
-color:#1e293b;
 }
 @media(max-width:780px){
-header{
-flex-direction:column;
-align-items:flex-start;
-}
-.actions{
-grid-template-columns:1fr;
-}
-.user{
-margin-left:0;
-}
-.frase{
-max-width:100%;
-}
+.actions{grid-template-columns:1fr;}
+.user{margin-left:0;}
+header{flex-direction:column;align-items:flex-start;}
 }
 </style>
 </head>
@@ -182,12 +132,10 @@ max-width:100%;
 
 <header>
 <div class="logo">
-<div class="avatar">
-<img src="assets/avatar-sabi.png" alt="SABI">
-</div>
+<img src="assets/avatar.png">
 <div>
 <h1>SABI AI CENTEC CALI</h1>
-<div class="sub">Saber • Aprender • Brillar • Imaginar</div>
+<div>Saber • Aprender • Brillar • Imaginar</div>
 </div>
 </div>
 
@@ -196,104 +144,94 @@ max-width:100%;
 </div>
 </header>
 
-<main>
 <div class="chat">
-
-<div class="top">
-Tutor pedagógico inteligente
-</div>
 
 <div id="messages"></div>
 
 <div class="input">
-<textarea id="pregunta" placeholder="Escribe aquí tu pregunta..."></textarea>
+<textarea id="q" placeholder="Escribe tu pregunta..."></textarea>
 
 <div class="actions">
-<button class="send" onclick="consultar()">Consultar a SABI</button>
+<button class="send" onclick="preguntar()">Consultar a SABI</button>
 <button class="new" onclick="nuevo()">Nueva conversación</button>
 </div>
 </div>
 
 </div>
-</main>
 
 <script>
-const messages = document.getElementById("messages");
-const pregunta = document.getElementById("pregunta");
+const q=document.getElementById("q");
+const messages=document.getElementById("messages");
 
-function mini(){
-return `
-<div class="mini">
-<img src="assets/avatar-sabi.png">
-</div>
-`;
-}
-
-function agregar(tipo,texto){
-const div=document.createElement("div");
-div.className="message "+tipo;
+function add(tipo,texto){
+const d=document.createElement("div");
+d.className="msg "+tipo;
 
 if(tipo==="sabi"){
-div.innerHTML=mini()+"<div>"+texto+"</div>";
+d.innerHTML='<div class="mini"><img src="assets/avatar.png"></div><div>'+texto+'</div>';
 }else{
-div.textContent=texto;
+d.textContent=texto;
 }
 
-messages.appendChild(div);
+messages.appendChild(d);
 messages.scrollTop=messages.scrollHeight;
 }
 
-function responder(q){
+function respuesta(p){
 
-const p=q.toLowerCase();
+const t=p.toLowerCase();
 
-if(p.includes("teoria idealista")){
+if(t.includes("teoria idealista")){
 return `
 PREGUNTA:
 ¿Qué es la teoría idealista?
 
-RESPUESTA CLARA:
-La teoría idealista es una corriente filosófica que afirma que las ideas, la mente o el pensamiento son más importantes que lo material.
+RESPUESTA:
+La teoría idealista es una corriente filosófica que afirma que las ideas y el pensamiento son fundamentales para comprender la realidad.
 
-En otras palabras:
-el idealismo considera que la realidad no depende únicamente de las cosas físicas, sino también de la conciencia, las ideas y la manera como pensamos el mundo.
-
-EJEMPLO SENCILLO:
-Si dos personas observan el mismo problema, cada una puede interpretarlo diferente según sus ideas y pensamientos.
-Para el idealismo, la mente influye profundamente en la realidad.
+EXPLICACIÓN:
+El idealismo considera que la mente y las ideas influyen en cómo entendemos el mundo.
 
 AUTORES IMPORTANTES:
 • Platón
 • Kant
 • Hegel
 
-IDEA CENTRAL:
-Primero está la idea o pensamiento; luego viene la acción o realidad material.
+EJEMPLO:
+Dos personas pueden vivir la misma situación y pensar diferente según sus ideas.
 
-PREGUNTA DE REFLEXIÓN:
-¿Crees que las ideas pueden cambiar una sociedad antes que el dinero o la fuerza?
+VIDA COTIDIANA:
+Antes de construir algo, primero nace la idea en la mente.
+
+VERIFICACIÓN:
+• Explica con tus palabras qué entendiste.
+• ¿Dónde ves el idealismo en la vida diaria?
 `;
 }
 
-if(p.includes("capital de roma")){
+if(t.includes("capital de roma")){
 return `
 PREGUNTA:
 ¿Cuál es la capital de Roma?
 
-CORRECCIÓN:
+RESPUESTA:
 La pregunta está incorrecta.
 
+CORRECCIÓN:
 Roma ya es una ciudad capital.
 
 FORMA CORRECTA:
 ¿Cuál es la capital de Italia?
 
-RESPUESTA:
+RESPUESTA CORRECTA:
 La capital de Italia es Roma.
+
+VERIFICACIÓN:
+• Escribe ahora cuál es la capital de Colombia.
 `;
 }
 
-if(p.includes("capital de italia")){
+if(t.includes("capital de italia")){
 return `
 PREGUNTA:
 ¿Cuál es la capital de Italia?
@@ -303,65 +241,64 @@ La capital de Italia es Roma.
 
 EXPLICACIÓN:
 Italia es el país.
-Roma es su ciudad capital.
+Roma es la ciudad capital.
+
+VERIFICACIÓN:
+• Escribe otra oración parecida usando Colombia.
 `;
 }
 
 return `
 PREGUNTA:
-${q}
+${p}
 
-RESPUESTA PEDAGÓGICA:
+RESPUESTA:
+Voy a ayudarte a comprender este tema paso a paso.
 
-Voy a explicarlo de forma clara, organizada y fácil de comprender.
-
-1. DEFINICIÓN
-Primero debemos entender qué significa el concepto.
-
-2. EXPLICACIÓN
-Un buen aprendizaje ocurre cuando comprendemos:
+EXPLICACIÓN:
+Aprender no es memorizar.
+Aprender es entender:
 • qué es,
 • para qué sirve,
 • cómo funciona,
 • y dónde se aplica.
 
-3. EJEMPLO
-Todo concepto debe conectarse con ejemplos reales para evitar confusión.
+EJEMPLO:
+Todo concepto debe relacionarse con situaciones reales para comprenderse mejor.
 
-4. REFLEXIÓN
-Aprender no es repetir; aprender es comprender.
+VIDA COTIDIANA:
+Piensa dónde has visto este tema en tu casa, colegio o trabajo.
 
-Ahora dime:
-¿qué parte específica no entiendes o deseas profundizar?
+VERIFICACIÓN:
+• Explica con tus palabras lo que entendiste.
+• Da un ejemplo diferente.
+• ¿Para qué sirve esto en la vida real?
 `;
 }
 
-function consultar(){
-const q=pregunta.value.trim();
+function preguntar(){
+const texto=q.value.trim();
 
-if(!q){
-pregunta.focus();
-return;
-}
+if(!texto)return;
 
-agregar("user",q);
+add("user",texto);
 
 setTimeout(()=>{
-agregar("sabi",responder(q));
-},300);
+add("sabi",respuesta(texto));
+},250);
 
-pregunta.value="";
-pregunta.focus();
+q.value="";
+q.focus();
 }
 
 function nuevo(){
 messages.innerHTML="";
-pregunta.focus();
+q.focus();
 }
 
-pregunta.addEventListener("keydown",function(e){
+q.addEventListener("keydown",e=>{
 if(e.key==="Enter" && (e.ctrlKey || e.metaKey)){
-consultar();
+preguntar();
 }
 });
 </script>
