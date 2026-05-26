@@ -6,47 +6,154 @@
 <title>SABI AI CENTEC CALI</title>
 <style>
 :root{
-  --azul:#082b63;--azul2:#0f4c81;--naranja:#f28c28;--amarillo:#ffd166;
-  --fondo:#f4f7fb;--texto:#102033;--borde:#d8e2ee;--usuario:#e8f1ff;--sabi:#fff8ee;
+  --azul:#082b63;
+  --azul2:#0f4c81;
+  --naranja:#f28c28;
+  --amarillo:#ffd166;
+  --fondo:#f4f7fb;
+  --texto:#102033;
+  --borde:#d8e2ee;
+  --usuario:#e8f1ff;
+  --sabi:#fff8ee;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,Helvetica,sans-serif;background:var(--fondo);color:var(--texto);min-height:100vh}
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--fondo);
+  color:var(--texto);
+  min-height:100vh;
+}
 header{
-  background:var(--azul);color:white;height:72px;display:flex;align-items:center;justify-content:space-between;
-  gap:12px;padding:8px 16px;position:sticky;top:0;z-index:20;box-shadow:0 4px 14px rgba(0,0,0,.12)
+  background:var(--azul);
+  color:white;
+  min-height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:8px 16px;
+  position:sticky;
+  top:0;
+  z-index:20;
+  box-shadow:0 4px 14px rgba(0,0,0,.12);
 }
 .brand{display:flex;align-items:center;gap:12px}
-.brand img{width:52px;height:52px;border-radius:50%;object-fit:cover;background:white;border:2px solid white}
-h1{font-size:1.7rem;line-height:1.05;font-weight:900}
+.brand img{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  object-fit:cover;
+  background:white;
+  border:2px solid white;
+}
+h1{font-size:1.65rem;line-height:1.05;font-weight:900}
 .sub{color:var(--amarillo);font-size:.86rem;font-weight:800;margin-top:2px}
-.frase{max-width:470px;background:rgba(255,255,255,.12);border-left:4px solid var(--naranja);padding:8px 12px;border-radius:12px;font-size:.9rem;font-weight:800;line-height:1.25}
-.app{max-width:980px;margin:0 auto;padding:14px 12px 20px}
-.askbox{background:white;border:1px solid var(--borde);border-radius:18px;padding:14px;box-shadow:0 6px 20px rgba(0,0,0,.06);margin-bottom:12px}
+.frase{
+  max-width:470px;
+  background:rgba(255,255,255,.12);
+  border-left:4px solid var(--naranja);
+  padding:8px 12px;
+  border-radius:12px;
+  font-size:.9rem;
+  font-weight:800;
+  line-height:1.25;
+}
+.app{max-width:980px;margin:0 auto;padding:12px}
+.askbox{
+  background:white;
+  border:1px solid var(--borde);
+  border-radius:18px;
+  padding:14px;
+  box-shadow:0 6px 20px rgba(0,0,0,.06);
+  margin-bottom:12px;
+}
 .ask-title{font-size:1.08rem;font-weight:900;color:var(--azul);margin-bottom:8px}
-textarea{width:100%;min-height:92px;border:1px solid #b9c9dc;border-radius:14px;padding:14px;font-family:inherit;font-size:1rem;line-height:1.45;resize:vertical;outline:none}
+textarea{
+  width:100%;
+  min-height:92px;
+  border:1px solid #b9c9dc;
+  border-radius:14px;
+  padding:14px;
+  font-family:inherit;
+  font-size:1rem;
+  line-height:1.45;
+  resize:vertical;
+  outline:none;
+}
 textarea:focus{border-color:var(--azul2);box-shadow:0 0 0 3px rgba(15,76,129,.12)}
 .actions{display:grid;grid-template-columns:1fr 170px;gap:10px;margin-top:10px}
 button{border:0;border-radius:14px;padding:13px;font-weight:900;font-size:1rem;cursor:pointer}
 .send{color:white;background:linear-gradient(135deg,var(--azul2),var(--azul))}
 .new{color:var(--azul);background:#e8eef6}
-.chat{background:white;border:1px solid var(--borde);border-radius:18px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.06)}
-.chat-head{padding:10px 14px;font-weight:900;color:var(--azul);border-bottom:1px solid var(--borde);background:#f8fbff}
-#messages{min-height:330px;max-height:58vh;overflow-y:auto;padding:14px}
-.msg{padding:14px 16px;border-radius:16px;margin-bottom:12px;line-height:1.55;white-space:pre-wrap;font-size:1rem}
+.chat{
+  background:white;
+  border:1px solid var(--borde);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 6px 20px rgba(0,0,0,.06);
+}
+.chat-head{
+  padding:10px 14px;
+  font-weight:900;
+  color:var(--azul);
+  border-bottom:1px solid var(--borde);
+  background:#f8fbff;
+}
+#messages{min-height:340px;max-height:58vh;overflow-y:auto;padding:14px}
+.msg{
+  padding:14px 16px;
+  border-radius:16px;
+  margin-bottom:12px;
+  line-height:1.55;
+  white-space:pre-wrap;
+  font-size:1rem;
+}
 .user{background:var(--usuario);border:1px solid #bdd7ff;margin-left:12%}
-.sabi{background:var(--sabi);border:1px solid #ffd18f;position:relative;padding-left:58px}
-.mini{position:absolute;left:14px;top:14px;width:32px;height:32px;border-radius:50%;overflow:hidden;background:white;box-shadow:0 3px 8px rgba(0,0,0,.16)}
+.sabi{
+  background:var(--sabi);
+  border:1px solid #ffd18f;
+  position:relative;
+  padding-left:58px;
+}
+.mini{
+  position:absolute;
+  left:14px;
+  top:14px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  overflow:hidden;
+  background:white;
+  box-shadow:0 3px 8px rgba(0,0,0,.16);
+}
 .mini img{width:100%;height:100%;object-fit:cover}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.chip{background:#edf5ff;color:var(--azul);border:1px solid #c9def7;padding:8px 10px;border-radius:999px;font-size:.88rem;font-weight:800}
-@media(max-width:760px){header{height:auto;align-items:flex-start;flex-direction:column}h1{font-size:1.35rem}.frase{max-width:100%}.actions{grid-template-columns:1fr}.user{margin-left:0}}
+.chip{
+  background:#edf5ff;
+  color:var(--azul);
+  border:1px solid #c9def7;
+  padding:8px 10px;
+  border-radius:999px;
+  font-size:.88rem;
+  font-weight:800;
+}
+@media(max-width:760px){
+  header{height:auto;align-items:flex-start;flex-direction:column}
+  h1{font-size:1.35rem}
+  .frase{max-width:100%}
+  .actions{grid-template-columns:1fr}
+  .user{margin-left:0}
+}
 </style>
 </head>
 <body>
 <header>
   <div class="brand">
     <img src="assets/avatar.png" alt="SABI">
-    <div><h1>SABI AI CENTEC CALI</h1><div class="sub">Saber • Aprender • Brillar • Imaginar</div></div>
+    <div>
+      <h1>SABI AI CENTEC CALI</h1>
+      <div class="sub">Saber • Aprender • Brillar • Imaginar</div>
+    </div>
   </div>
   <div class="frase">“El error no nos detiene. Nos enseña, nos fortalece y nos hace crecer.”</div>
 </header>
@@ -54,12 +161,13 @@ button{border:0;border-radius:14px;padding:13px;font-weight:900;font-size:1rem;c
 <main class="app">
   <section class="askbox">
     <div class="ask-title">Pregunta a SABI</div>
-    <textarea id="question" placeholder="Escribe tu pregunta aquí. Ejemplo: ¿Qué es la teoría idealista?"></textarea>
+    <textarea id="question" placeholder="Escribe tu pregunta aquí. Ejemplo: ¿Qué es un ángulo agudo?"></textarea>
     <div class="actions">
       <button class="send" onclick="ask()">Preguntar</button>
       <button class="new" onclick="resetChat()">Nueva conversación</button>
     </div>
     <div class="chips">
+      <button class="chip" onclick="example('¿Qué es un ángulo agudo?')">Ángulo agudo</button>
       <button class="chip" onclick="example('¿Qué es la teoría idealista?')">Teoría idealista</button>
       <button class="chip" onclick="example('¿Cuál es la capital de Italia?')">Capital de Italia</button>
       <button class="chip" onclick="example('Explícame las fracciones')">Fracciones</button>
@@ -77,25 +185,66 @@ const q=document.getElementById("question");
 const messages=document.getElementById("messages");
 
 function normalizeText(t){
-  return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[¿?.,;:!]/g," ").replace(/\s+/g," ").trim();
+  return t.toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/[¿?.,;:!]/g," ")
+    .replace(/\s+/g," ")
+    .trim();
 }
 function mini(){return '<div class="mini"><img src="assets/avatar.png" alt="SABI"></div>'}
 function add(type,text){
   const d=document.createElement("div");
   d.className="msg "+type;
   if(type==="sabi"){d.innerHTML=mini()+"<div>"+text+"</div>"}else{d.textContent=text}
-  messages.appendChild(d);messages.scrollTop=messages.scrollHeight;
+  messages.appendChild(d);
+  messages.scrollTop=messages.scrollHeight;
 }
 function example(text){q.value=text;q.focus()}
 
 function response(input){
   const t=normalizeText(input);
 
-  if(t.includes("capital de roma")){
-    return `PREGUNTA:
-¿Cuál es la capital de Roma?
+  if(t.includes("angulo agudo") || t.includes("ángulo agudo")){
+    return `RESPUESTA DIRECTA:
+Un ángulo agudo es un ángulo que mide más de 0 grados y menos de 90 grados.
 
-RESPUESTA DIRECTA:
+EXPLICACIÓN PEDAGÓGICA:
+Un ángulo se forma cuando dos líneas se unen en un punto llamado vértice.
+Si la abertura entre esas dos líneas es pequeña, menor que una esquina recta, entonces hablamos de un ángulo agudo.
+
+Comparación:
+• Ángulo agudo: menos de 90°
+• Ángulo recto: exactamente 90°
+• Ángulo obtuso: más de 90° y menos de 180°
+
+EJEMPLO VISUAL:
+Imagina una puerta apenas abierta. La abertura pequeña que se forma puede parecerse a un ángulo agudo.
+
+EJEMPLOS DE ÁNGULOS AGUDOS:
+• 20°
+• 35°
+• 45°
+• 60°
+• 89°
+
+NO SON AGUDOS:
+• 90° porque es recto.
+• 120° porque es obtuso.
+
+APLICACIÓN EN LA VIDA COTIDIANA:
+Los ángulos agudos aparecen en techos, señales de tránsito, dibujos geométricos, arquitectura, diseño, carpintería, rampas, tijeras abiertas y objetos triangulares.
+
+ERROR COMÚN:
+Pensar que 90° es agudo. No. 90° es ángulo recto.
+
+VERIFICACIÓN:
+• Explica con tus palabras qué es un ángulo agudo.
+• Da un ejemplo de la vida diaria donde veas uno.
+• Responde: ¿75° es un ángulo agudo? ¿Por qué?`;
+  }
+
+  if(t.includes("capital de roma")){
+    return `RESPUESTA DIRECTA:
 La pregunta está mal formulada, porque Roma no es un país. Roma es una ciudad.
 
 La forma correcta sería:
@@ -119,10 +268,7 @@ VERIFICACIÓN:
   }
 
   if(t.includes("capital de italia")){
-    return `PREGUNTA:
-¿Cuál es la capital de Italia?
-
-RESPUESTA DIRECTA:
+    return `RESPUESTA DIRECTA:
 La capital de Italia es Roma.
 
 EXPLICACIÓN PEDAGÓGICA:
@@ -141,10 +287,7 @@ VERIFICACIÓN:
   }
 
   if(t.includes("teoria idealista") || t.includes("idealismo")){
-    return `PREGUNTA:
-¿Qué es la teoría idealista?
-
-RESPUESTA DIRECTA:
+    return `RESPUESTA DIRECTA:
 La teoría idealista es una corriente filosófica que sostiene que las ideas, la mente o la conciencia son fundamentales para comprender la realidad.
 
 EXPLICACIÓN PEDAGÓGICA:
@@ -177,10 +320,7 @@ VERIFICACIÓN:
   }
 
   if(t.includes("fraccion") || t.includes("fracciones")){
-    return `PREGUNTA:
-${input}
-
-RESPUESTA DIRECTA:
+    return `RESPUESTA DIRECTA:
 Una fracción representa una parte de un todo.
 
 EXPLICACIÓN PEDAGÓGICA:
@@ -203,40 +343,38 @@ VERIFICACIÓN:
 • ¿Dónde usarías fracciones en tu vida diaria?`;
   }
 
-  return `PREGUNTA:
-${input}
-
-RESPUESTA DIRECTA:
-Voy a responder tu pregunta de forma clara y organizada para que puedas comprenderla, no solo leerla.
+  return `RESPUESTA DIRECTA:
+No tengo una respuesta específica programada para esa pregunta en esta versión local.
 
 EXPLICACIÓN PEDAGÓGICA:
-Para aprender bien este tema debemos identificar:
-• qué significa,
-• para qué sirve,
-• cómo se aplica,
-• qué errores se deben evitar.
+Para que SABI responda cualquier tema como una verdadera IA, debe conectarse a un motor de inteligencia artificial. Esta versión funciona sin backend y solo responde correctamente los temas que ya fueron programados.
 
-EJEMPLO:
-Todo conocimiento se entiende mejor cuando lo conectamos con una situación real de la vida cotidiana.
-
-APLICACIÓN EN LA VIDA COTIDIANA:
-Este tema puede ayudarte a tomar mejores decisiones, resolver problemas, explicar ideas y comprender mejor tu entorno.
+Lo correcto para esta pregunta sería:
+1. identificar el concepto central,
+2. definirlo con precisión,
+3. explicarlo con ejemplos,
+4. mostrar su uso cotidiano,
+5. pedirte que expliques lo aprendido.
 
 VERIFICACIÓN:
-• Escribe con tus palabras qué entendiste.
-• Da un ejemplo propio.
-• Explica para qué sirve esto en la vida diaria.`;
+Escribe la pregunta con una palabra clave más concreta o conectemos SABI a un motor real de IA para responder cualquier tema.`;
 }
 
 function ask(){
   const text=q.value.trim();
   if(!text){q.focus();return}
   add("user",text);
-  setTimeout(()=>add("sabi",response(text)),180);
-  q.value="";q.focus();
+  setTimeout(()=>add("sabi",response(text)),120);
+  q.value="";
+  q.focus();
 }
-function resetChat(){messages.innerHTML="";q.focus()}
-q.addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey))ask()});
+function resetChat(){
+  messages.innerHTML="";
+  q.focus();
+}
+q.addEventListener("keydown",e=>{
+  if(e.key==="Enter" && (e.ctrlKey || e.metaKey)) ask();
+});
 q.focus();
 </script>
 </body>
