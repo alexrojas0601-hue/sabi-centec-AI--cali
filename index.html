@@ -1,435 +1,370 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>SABI AI CENTEC CALI</title>
-<meta name="description" content="SABI AI CENTEC CALI - Tutor pedagógico para resolver dudas y fortalecer aprendizaje significativo." />
 <style>
 :root{
-  --azul:#082b63;
-  --azul2:#0f4c81;
-  --naranja:#f28c28;
-  --amarillo:#ffd166;
-  --texto:#1d2939;
-  --borde:#d8e2ee;
-  --suave:#fff8ee;
-  --celeste:#e8f1ff;
-  --sombra:0 8px 24px rgba(0,0,0,.08);
+--azul:#082b63;
+--naranja:#f28c28;
+--gris:#eef2f7;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{
-  font-family:Arial, Helvetica, sans-serif;
-  background:linear-gradient(135deg,#eef5ff,#fff8ef);
-  color:var(--texto);
-  min-height:100vh;
-  overflow-x:hidden;
+font-family:Arial,Helvetica,sans-serif;
+background:#f4f7fb;
+color:#1e293b;
 }
 header{
-  min-height:76px;
-  background:linear-gradient(135deg,var(--azul),var(--azul2));
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:9px 16px;
-  box-shadow:0 8px 22px rgba(0,0,0,.14);
-  position:sticky;
-  top:0;
-  z-index:10;
+background:var(--azul);
+color:white;
+padding:10px 16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+position:sticky;
+top:0;
+z-index:10;
 }
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  min-width:0;
+.logo{
+display:flex;
+align-items:center;
+gap:12px;
 }
 .avatar{
-  width:54px;
-  height:54px;
-  border-radius:50%;
-  overflow:hidden;
-  border:3px solid rgba(255,255,255,.45);
-  background:#fff;
-  flex:0 0 auto;
+width:56px;
+height:56px;
+border-radius:50%;
+overflow:hidden;
+background:white;
+flex-shrink:0;
 }
 .avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
 }
-.brand h1{
-  font-size:clamp(1.05rem,2.3vw,1.55rem);
-  font-weight:900;
-  line-height:1.05;
+h1{
+font-size:2rem;
+font-weight:900;
 }
 .sub{
-  color:var(--amarillo);
-  font-size:.78rem;
-  font-weight:800;
-  margin-top:3px;
+color:#ffd166;
+font-size:.9rem;
+font-weight:700;
 }
 .frase{
-  max-width:470px;
-  font-size:.84rem;
-  line-height:1.25;
-  font-weight:800;
-  background:rgba(255,255,255,.13);
-  border-left:4px solid var(--naranja);
-  border-radius:12px;
-  padding:7px 10px;
+border-left:4px solid var(--naranja);
+padding-left:10px;
+font-weight:700;
+max-width:450px;
 }
 main{
-  width:min(1120px,100%);
-  margin:10px auto;
-  padding:0 12px 14px;
+max-width:1100px;
+margin:12px auto;
+padding:0 12px 20px;
 }
-.intro{
-  background:rgba(255,255,255,.96);
-  border:1px solid var(--borde);
-  border-radius:18px;
-  padding:10px 12px;
-  box-shadow:var(--sombra);
-  margin-bottom:10px;
-}
-.intro h2{
-  font-size:1.02rem;
-  color:var(--azul);
-  margin-bottom:2px;
-}
-.intro p{
-  font-size:.9rem;
-  line-height:1.35;
-  color:#334e68;
-}
-.chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:9px;
-}
-.chip{
-  border:1px solid #cfe0f5;
-  background:#eef5ff;
-  color:var(--azul);
-  border-radius:999px;
-  padding:8px 10px;
-  font-size:.86rem;
-  font-weight:850;
-  cursor:pointer;
-}
-.chip:hover{background:#dfeeff}
 .chat{
-  background:white;
-  border:1px solid var(--borde);
-  border-radius:18px;
-  box-shadow:var(--sombra);
-  overflow:hidden;
-  display:grid;
-  grid-template-rows:auto 1fr auto;
-  height:calc(100vh - 190px);
-  min-height:500px;
+background:white;
+border-radius:18px;
+overflow:hidden;
+box-shadow:0 4px 18px rgba(0,0,0,.08);
+border:1px solid #dbe3ef;
 }
-.chat-head{
-  background:#f7fbff;
-  border-bottom:1px solid var(--borde);
-  padding:9px 13px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
-.chat-head h3{
-  color:var(--azul);
-  font-size:.98rem;
-}
-.status{
-  font-size:.78rem;
-  font-weight:850;
-  background:#e6f4ea;
-  color:#155724;
-  padding:5px 9px;
-  border-radius:999px;
+.top{
+padding:12px 16px;
+background:#f7f9fc;
+border-bottom:1px solid #dbe3ef;
+font-weight:800;
+color:var(--azul);
 }
 #messages{
-  overflow-y:auto;
-  padding:13px;
-  background:#fcfdff;
+height:58vh;
+overflow-y:auto;
+padding:16px;
+background:white;
 }
 .message{
-  margin-bottom:10px;
-  padding:12px 14px;
-  border-radius:16px;
-  line-height:1.5;
-  white-space:pre-wrap;
-  font-size:.96rem;
+padding:14px;
+border-radius:14px;
+margin-bottom:12px;
+line-height:1.6;
+white-space:pre-wrap;
+font-size:1rem;
 }
 .user{
-  background:var(--celeste);
-  border:1px solid #bfd7ff;
-  margin-left:12%;
+background:#e8f1ff;
+margin-left:12%;
 }
 .sabi{
-  background:var(--suave);
-  border:1px solid #ffd79d;
-  margin-right:4%;
-  position:relative;
-  padding-left:52px;
+background:#fff7eb;
+border:1px solid #ffd18f;
+position:relative;
+padding-left:54px;
 }
 .mini{
-  position:absolute;
-  left:12px;
-  top:12px;
-  width:30px;
-  height:30px;
-  border-radius:50%;
-  overflow:hidden;
-  background:white;
-  border:2px solid white;
-  box-shadow:0 3px 9px rgba(0,0,0,.14);
+position:absolute;
+left:12px;
+top:12px;
+width:30px;
+height:30px;
+border-radius:50%;
+overflow:hidden;
+background:white;
 }
 .mini img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
+width:100%;
+height:100%;
+object-fit:cover;
 }
 .input{
-  border-top:1px solid var(--borde);
-  background:white;
-  padding:10px 12px 12px;
+padding:14px;
+border-top:1px solid #dbe3ef;
+background:white;
 }
 textarea{
-  width:100%;
-  min-height:82px;
-  max-height:180px;
-  resize:vertical;
-  border:1px solid var(--borde);
-  border-radius:16px;
-  padding:12px 13px;
-  font-family:inherit;
-  font-size:.98rem;
-  line-height:1.45;
-  outline:none;
+width:100%;
+min-height:95px;
+border-radius:14px;
+border:1px solid #cbd5e1;
+padding:14px;
+font-size:1rem;
+font-family:inherit;
+resize:vertical;
+outline:none;
 }
 textarea:focus{
-  border-color:var(--azul2);
-  box-shadow:0 0 0 3px rgba(15,76,129,.12);
+border-color:var(--azul);
 }
 .actions{
-  display:grid;
-  grid-template-columns:1fr 165px;
-  gap:9px;
-  margin-top:8px;
+display:grid;
+grid-template-columns:1fr 180px;
+gap:10px;
+margin-top:10px;
 }
 button{
-  border:none;
-  border-radius:14px;
-  padding:12px;
-  cursor:pointer;
-  font-weight:900;
-  font-size:.96rem;
+border:none;
+border-radius:14px;
+padding:14px;
+cursor:pointer;
+font-weight:900;
+font-size:1rem;
 }
 .send{
-  color:white;
-  background:linear-gradient(135deg,var(--azul2),var(--azul));
+background:var(--azul);
+color:white;
 }
 .new{
-  background:#edf3fa;
-  color:var(--azul);
-}
-.note{
-  text-align:center;
-  color:#52606d;
-  font-size:.76rem;
-  margin-top:7px;
+background:#e2e8f0;
+color:#1e293b;
 }
 @media(max-width:780px){
-  header{
-    align-items:flex-start;
-    flex-direction:column;
-    padding:10px 12px;
-  }
-  .frase{
-    max-width:100%;
-    font-size:.8rem;
-  }
-  .chat{
-    height:calc(100vh - 245px);
-    min-height:480px;
-  }
-  .user,.sabi{
-    margin-left:0;
-    margin-right:0;
-  }
-  .actions{
-    grid-template-columns:1fr;
-  }
+header{
+flex-direction:column;
+align-items:flex-start;
+}
+.actions{
+grid-template-columns:1fr;
+}
+.user{
+margin-left:0;
+}
+.frase{
+max-width:100%;
+}
 }
 </style>
 </head>
 <body>
+
 <header>
-  <div class="brand">
-    <div class="avatar">
-      <img src="assets/avatar-sabi.png" alt="Avatar SABI CENTEC">
-    </div>
-    <div>
-      <h1>SABI AI CENTEC CALI</h1>
-      <div class="sub">Saber • Aprender • Brillar • Imaginar</div>
-    </div>
-  </div>
-  <div class="frase">“El error no nos detiene. Nos enseña, nos fortalece y nos hace crecer.”</div>
+<div class="logo">
+<div class="avatar">
+<img src="assets/avatar-sabi.png" alt="SABI">
+</div>
+<div>
+<h1>SABI AI CENTEC CALI</h1>
+<div class="sub">Saber • Aprender • Brillar • Imaginar</div>
+</div>
+</div>
+
+<div class="frase">
+“El error no nos detiene. Nos enseña, nos fortalece y nos hace crecer.”
+</div>
 </header>
 
 <main>
-  <section class="intro">
-    <h2>Haz tu pregunta. SABI te ayuda a comprender.</h2>
-    <p>Escribe una duda, concepto o necesidad. Si es una pregunta directa, SABI responde primero lo correcto; si requiere explicación, enseña paso a paso.</p>
-    <div class="chips">
-      <button class="chip" type="button" onclick="usarEjemplo('¿Cuál es la capital de Italia?')">Capital de Italia</button>
-      <button class="chip" type="button" onclick="usarEjemplo('¿Cuál es la capital de Roma?')">Corregir confusión</button>
-      <button class="chip" type="button" onclick="usarEjemplo('Explícame las fracciones desde cero.')">Fracciones</button>
-      <button class="chip" type="button" onclick="usarEjemplo('Ayúdame a mejorar mi comprensión lectora.')">Comprensión lectora</button>
-    </div>
-  </section>
+<div class="chat">
 
-  <section class="chat">
-    <div class="chat-head">
-      <h3>Tutor pedagógico</h3>
-      <span class="status">Listo</span>
-    </div>
-    <div id="messages"></div>
-    <div class="input">
-      <textarea id="pregunta" placeholder="Escribe aquí tu pregunta. Ejemplo: ¿Cuál es la capital de Italia? / No entiendo las fracciones / Explícame la fotosíntesis."></textarea>
-      <div class="actions">
-        <button class="send" type="button" onclick="consultarSabi()">Consultar a SABI</button>
-        <button class="new" type="button" onclick="nuevaConversacion()">Nueva conversación</button>
-      </div>
-      <div class="note">Ctrl + Enter también envía la pregunta.</div>
-    </div>
-  </section>
+<div class="top">
+Tutor pedagógico inteligente
+</div>
+
+<div id="messages"></div>
+
+<div class="input">
+<textarea id="pregunta" placeholder="Escribe aquí tu pregunta..."></textarea>
+
+<div class="actions">
+<button class="send" onclick="consultar()">Consultar a SABI</button>
+<button class="new" onclick="nuevo()">Nueva conversación</button>
+</div>
+</div>
+
+</div>
 </main>
 
 <script>
-var SABI_AVATAR = "assets/avatar-sabi.png";
-var messages = document.getElementById("messages");
-var pregunta = document.getElementById("pregunta");
-var storageKey = "sabi_centec_chat_limpio_v6";
+const messages = document.getElementById("messages");
+const pregunta = document.getElementById("pregunta");
 
-function crearMiniLogo(){
-  var mini = document.createElement("div");
-  mini.className = "mini";
-  var img = document.createElement("img");
-  img.src = SABI_AVATAR;
-  img.alt = "SABI";
-  mini.appendChild(img);
-  return mini;
+function mini(){
+return `
+<div class="mini">
+<img src="assets/avatar-sabi.png">
+</div>
+`;
 }
-function guardar(){
-  try{ localStorage.setItem(storageKey, messages.innerHTML); }catch(e){}
-}
-function cargar(){
-  try{
-    var saved = localStorage.getItem(storageKey);
-    if(saved){ messages.innerHTML = saved; }
-  }catch(e){}
-}
-function agregarMensaje(tipo, texto){
-  var div = document.createElement("div");
-  div.className = "message " + tipo;
-  if(tipo === "sabi"){ div.appendChild(crearMiniLogo()); }
-  var content = document.createElement("div");
-  content.textContent = texto;
-  div.appendChild(content);
-  messages.appendChild(div);
-  messages.scrollTop = messages.scrollHeight;
-  guardar();
-}
-function usarEjemplo(texto){
-  pregunta.value = texto;
-  pregunta.focus();
-}
-function normalizar(texto){
-  return texto.toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-    .replace(/[¿?.,;:!]/g," ")
-    .replace(/\s+/g," ")
-    .trim();
-}
-function respuestaDirecta(q){
-  var s = normalizar(q);
 
-  if(s.indexOf("capital de roma") >= 0){
-    return "Hay una confusión importante en la pregunta.\n\nRoma no es un país; Roma es una ciudad.\n\nLa forma correcta sería preguntar: ¿cuál es la capital de Italia?\n\nRespuesta correcta:\nRoma es la capital de Italia.\n\nExplicación breve:\nItalia es el país. Roma es la ciudad capital.\n\nReto de comprensión:\nCompleta esta idea: Bogotá es la capital de ________.";
-  }
+function agregar(tipo,texto){
+const div=document.createElement("div");
+div.className="message "+tipo;
 
-  if(s.indexOf("capital de italia") >= 0){
-    return "La capital de Italia es Roma.\n\nExplicación breve:\nItalia es el país y Roma es su ciudad capital.\n\nReto de comprensión:\nEscribe una oración similar con Colombia y Bogotá.";
-  }
-
-  if(s.indexOf("capital de colombia") >= 0){
-    return "La capital de Colombia es Bogotá.\n\nExplicación breve:\nColombia es el país y Bogotá es su ciudad capital.\n\nReto de comprensión:\nAhora intenta decirlo al revés: Bogotá es la capital de ________.";
-  }
-
-  if(s === "hola" || s === "buenos dias" || s === "buenas tardes" || s === "buenas noches"){
-    return "Hola. Soy SABI AI CENTEC CALI.\n\nEstoy aquí para ayudarte a comprender, no solo para darte respuestas rápidas.\n\nEscribe tu pregunta y la trabajamos paso a paso.";
-  }
-
-  return null;
+if(tipo==="sabi"){
+div.innerHTML=mini()+"<div>"+texto+"</div>";
+}else{
+div.textContent=texto;
 }
-function extraerTema(q){
-  var t = q.trim()
-    .replace(/[¿?]/g,"")
-    .replace(/^expl[ií]came\s+/i,"")
-    .replace(/^no entiendo\s+/i,"")
-    .replace(/^qu[eé]\s+es\s+/i,"");
-  if(t.length > 80){ t = t.substring(0,80) + "..."; }
-  return t || "el concepto consultado";
-}
-function construirRespuesta(q){
-  var directa = respuestaDirecta(q);
-  if(directa){ return directa; }
 
-  var tema = extraerTema(q);
+messages.appendChild(div);
+messages.scrollTop=messages.scrollHeight;
+}
 
-  return "Excelente pregunta.\n\nVoy a ayudarte como tutor pedagógico: primero aclaramos el concepto, luego lo conectamos con un ejemplo y finalmente verificamos si realmente quedó comprendido.\n\nPregunta:\n“" + q + "”\n\n1. Idea principal\nEl tema central parece ser: " + tema + ".\nPara aprenderlo bien, no basta con memorizar una frase. Debemos comprender qué significa, para qué sirve y cómo se aplica.\n\n2. Explicación clara\nUn concepto se entiende mejor cuando lo dividimos en partes pequeñas:\n• significado,\n• ejemplo,\n• aplicación,\n• error común,\n• práctica.\n\n3. Ejemplo sencillo\nPiensa en este tema como una herramienta. Una herramienta solo sirve cuando sabes cómo se llama, para qué sirve, cuándo usarla y qué error debes evitar.\n\n4. Pregunta de reflexión\n¿Qué parte te causa más duda: el significado, el procedimiento, el ejemplo o la aplicación?\n\n5. Reto de aprendizaje\nIntenta explicarlo con tus propias palabras en tres líneas.\n\nRecuerda: el error no nos detiene. Nos enseña, nos fortalece y nos hace crecer.\n\nRespóndeme con tu intento y te ayudaré a mejorarlo.";
-}
-function consultarSabi(){
-  var q = pregunta.value.trim();
+function responder(q){
 
-  if(!q){
-    agregarMensaje("sabi","Escribe tu pregunta. SABI está listo para ayudarte a comprender paso a paso.");
-    pregunta.focus();
-    return;
-  }
+const p=q.toLowerCase();
 
-  agregarMensaje("user", q);
-  agregarMensaje("sabi", construirRespuesta(q));
-  pregunta.value = "";
-  pregunta.focus();
+if(p.includes("teoria idealista")){
+return `
+PREGUNTA:
+¿Qué es la teoría idealista?
+
+RESPUESTA CLARA:
+La teoría idealista es una corriente filosófica que afirma que las ideas, la mente o el pensamiento son más importantes que lo material.
+
+En otras palabras:
+el idealismo considera que la realidad no depende únicamente de las cosas físicas, sino también de la conciencia, las ideas y la manera como pensamos el mundo.
+
+EJEMPLO SENCILLO:
+Si dos personas observan el mismo problema, cada una puede interpretarlo diferente según sus ideas y pensamientos.
+Para el idealismo, la mente influye profundamente en la realidad.
+
+AUTORES IMPORTANTES:
+• Platón
+• Kant
+• Hegel
+
+IDEA CENTRAL:
+Primero está la idea o pensamiento; luego viene la acción o realidad material.
+
+PREGUNTA DE REFLEXIÓN:
+¿Crees que las ideas pueden cambiar una sociedad antes que el dinero o la fuerza?
+`;
 }
-function nuevaConversacion(){
-  if(confirm("¿Deseas iniciar una nueva conversación en esta pantalla?")){
-    messages.innerHTML = "";
-    try{ localStorage.removeItem(storageKey); }catch(e){}
-    bienvenida();
-    pregunta.focus();
-  }
+
+if(p.includes("capital de roma")){
+return `
+PREGUNTA:
+¿Cuál es la capital de Roma?
+
+CORRECCIÓN:
+La pregunta está incorrecta.
+
+Roma ya es una ciudad capital.
+
+FORMA CORRECTA:
+¿Cuál es la capital de Italia?
+
+RESPUESTA:
+La capital de Italia es Roma.
+`;
 }
-function bienvenida(){
-  agregarMensaje("sabi","Bienvenido a SABI AI CENTEC CALI.\n\nHaz una pregunta natural, como lo harías con un maestro.\n\nEjemplos:\n• ¿Cuál es la capital de Italia?\n• No entiendo las fracciones.\n• Explícame la fotosíntesis.\n• Ayúdame a mejorar comprensión lectora.\n\nResponderé con claridad, precisión y pedagogía.\n\n“El error no nos detiene. Nos enseña, nos fortalece y nos hace crecer.”");
+
+if(p.includes("capital de italia")){
+return `
+PREGUNTA:
+¿Cuál es la capital de Italia?
+
+RESPUESTA:
+La capital de Italia es Roma.
+
+EXPLICACIÓN:
+Italia es el país.
+Roma es su ciudad capital.
+`;
 }
-pregunta.addEventListener("keydown", function(e){
-  if(e.key === "Enter" && (e.ctrlKey || e.metaKey)){
-    consultarSabi();
-  }
-});
-cargar();
-if(!messages.innerHTML.trim()){ bienvenida(); }
+
+return `
+PREGUNTA:
+${q}
+
+RESPUESTA PEDAGÓGICA:
+
+Voy a explicarlo de forma clara, organizada y fácil de comprender.
+
+1. DEFINICIÓN
+Primero debemos entender qué significa el concepto.
+
+2. EXPLICACIÓN
+Un buen aprendizaje ocurre cuando comprendemos:
+• qué es,
+• para qué sirve,
+• cómo funciona,
+• y dónde se aplica.
+
+3. EJEMPLO
+Todo concepto debe conectarse con ejemplos reales para evitar confusión.
+
+4. REFLEXIÓN
+Aprender no es repetir; aprender es comprender.
+
+Ahora dime:
+¿qué parte específica no entiendes o deseas profundizar?
+`;
+}
+
+function consultar(){
+const q=pregunta.value.trim();
+
+if(!q){
 pregunta.focus();
+return;
+}
+
+agregar("user",q);
+
+setTimeout(()=>{
+agregar("sabi",responder(q));
+},300);
+
+pregunta.value="";
+pregunta.focus();
+}
+
+function nuevo(){
+messages.innerHTML="";
+pregunta.focus();
+}
+
+pregunta.addEventListener("keydown",function(e){
+if(e.key==="Enter" && (e.ctrlKey || e.metaKey)){
+consultar();
+}
+});
 </script>
+
 </body>
 </html>
