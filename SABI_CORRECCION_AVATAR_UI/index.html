@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SABI AI CENTEC CALI</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --azul:#082b63;
+  --azul2:#0f4c81;
+  --naranja:#f28c28;
+  --amarillo:#ffd166;
+  --fondo:#f5f8fc;
+  --texto:#102033;
+  --borde:#d8e2ee;
+  --usuario:#e8f1ff;
+  --sabi:#fff8ee;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(180deg,#f7faff,#eef3f8);
+  color:var(--texto);
+  display:flex;
+  flex-direction:column;
+}
+header{
+  background:var(--azul);
+  color:white;
+  min-height:74px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:8px 18px;
+  box-shadow:0 6px 18px rgba(0,0,0,.15);
+}
+.brand{display:flex;align-items:center;gap:12px}
+.avatar{
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  overflow:hidden;
+  background:white;
+  border:2px solid white;
+  flex:0 0 auto;
+}
+.avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:left center;
+  display:block;
+}
+h1{
+  font-size:clamp(1.2rem,2.5vw,1.7rem);
+  font-weight:900;
+  line-height:1.05;
+}
+.sub{
+  color:var(--amarillo);
+  font-size:.84rem;
+  font-weight:800;
+  margin-top:4px;
+}
+.frase{
+  max-width:480px;
+  background:rgba(255,255,255,.12);
+  border-left:4px solid var(--naranja);
+  border-radius:12px;
+  padding:8px 12px;
+  font-size:.86rem;
+  line-height:1.28;
+  font-weight:800;
+}
+.app{
+  width:min(960px,100%);
+  margin:0 auto;
+  padding:18px 14px 14px;
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.ask{
+  background:white;
+  border:1px solid var(--borde);
+  border-radius:22px;
+  box-shadow:0 10px 30px rgba(8,43,99,.08);
+  padding:14px;
+}
+.inputline{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+.input-avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  overflow:hidden;
+  background:white;
+  border:1px solid #e4edf7;
+  flex:0 0 auto;
+}
+.input-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:left center;
+}
+.wrap{
+  position:relative;
+  flex:1;
+}
+textarea{
+  width:100%;
+  min-height:76px;
+  max-height:170px;
+  resize:vertical;
+  border:1.5px solid #c7d7eb;
+  background:#fbfdff;
+  border-radius:18px;
+  padding:16px 58px 16px 18px;
+  font-family:inherit;
+  font-size:1.08rem;
+  line-height:1.45;
+  outline:none;
+}
+textarea:focus{
+  border-color:var(--azul2);
+  box-shadow:0 0 0 4px rgba(15,76,129,.10);
+  background:white;
+}
+.send{
+  position:absolute;
+  right:12px;
+  top:12px;
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--azul2),var(--azul));
+  color:white;
+  font-size:1.25rem;
+  font-weight:900;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.hint{
+  margin:9px 0 0 56px;
+  color:#64748b;
+  font-size:.82rem;
+}
+.chat{
+  background:white;
+  border:1px solid var(--borde);
+  border-radius:22px;
+  box-shadow:0 10px 30px rgba(8,43,99,.08);
+  overflow:hidden;
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+}
+.chat-head{
+  padding:11px 16px;
+  border-bottom:1px solid var(--borde);
+  background:#f8fbff;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:var(--azul);
+  font-weight:900;
+}
+.status{
+  font-size:.76rem;
+  padding:4px 9px;
+  border-radius:999px;
+  color:#856404;
+  background:#fff3cd;
+}
+#messages{
+  flex:1;
+  min-height:320px;
+  overflow-y:auto;
+  padding:16px;
+}
+.empty{
+  height:100%;
+  min-height:260px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:#6b7b90;
+}
+.empty strong{
+  display:block;
+  color:var(--azul);
+  font-size:1.25rem;
+  margin-bottom:8px;
+}
+.msg{
+  max-width:88%;
+  padding:14px 16px;
+  border-radius:18px;
+  margin-bottom:14px;
+  line-height:1.6;
+  white-space:pre-wrap;
+  font-size:1rem;
+}
+.user{
+  margin-left:auto;
+  background:var(--usuario);
+  border:1px solid #bdd7ff;
+}
+.sabi{
+  margin-right:auto;
+  background:var(--sabi);
+  border:1px solid #ffd18f;
+  position:relative;
+  padding-left:58px;
+}
+.mini{
+  position:absolute;
+  left:14px;
+  top:14px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  overflow:hidden;
+  background:white;
+  box-shadow:0 3px 8px rgba(0,0,0,.14);
+}
+.mini img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:left center;
+}
+.footer{
+  text-align:center;
+  font-size:.82rem;
+  color:#64748b;
+}
+.footer span{color:var(--azul);font-weight:800}
+@media(max-width:760px){
+  header{flex-direction:column;align-items:flex-start}
+  .frase{max-width:100%}
+  .input-avatar{display:none}
+  .hint{margin-left:4px}
+  .msg{max-width:100%}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="avatar"><img src="assets/sabi-oficial.png" alt="Avatar oficial SABI"></div>
+    <div>
+      <h1>SABI AI CENTEC CALI</h1>
+      <div class="sub">Saber • Aprender • Brillar • Imaginar</div>
+    </div>
+  </div>
+  <div class="frase">“El error no nos detiene. Nos enseña, nos fortalece y nos hace crecer.”</div>
+</header>
+
+<main class="app">
+  <section class="ask">
+    <div class="inputline">
+      <div class="input-avatar"><img src="assets/sabi-oficial.png" alt="SABI"></div>
+      <div class="wrap">
+        <textarea id="question" placeholder="Escribe tu pregunta aquí y presiona Enter..."></textarea>
+        <button class="send" onclick="askSabi()">➤</button>
+      </div>
+    </div>
+    <div class="hint">Enter = preguntar · Shift + Enter = salto de línea</div>
+  </section>
+
+  <section class="chat">
+    <div class="chat-head">
+      <span>Respuesta de SABI</span>
+      <span class="status" id="status">Pendiente conexión IA</span>
+    </div>
+    <div id="messages">
+      <div class="empty" id="emptyState">
+        <div>
+          <strong>SABI está listo.</strong>
+          Pregunta lo que necesites aprender.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <span>@colegiocentecoficial</span> · <span>@colegiocentec</span> · Calle 54 #41E3-57 · Cali
+  </div>
+</main>
+
+<script>
+/*
+IMPORTANTE:
+Esta base ya corrige interfaz y avatar.
+Para que SABI responda como IA real, pegue aquí los datos de Supabase/OpenAI usados por la versión que funcionaba.
+*/
+const SUPABASE_URL = "";
+const SUPABASE_ANON_KEY = "";
+const FUNCTION_NAMES_TO_TRY = ["sabi-chat","chat","sabi","ask-sabi"];
+
+const question = document.getElementById("question");
+const messages = document.getElementById("messages");
+const statusBox = document.getElementById("status");
+
+const promptMaestro = `
+Actúa como SABI AI CENTEC CALI, IA académica/tutor digital.
+Responde con precisión, sin inventar y convierte cada pregunta en aprendizaje significativo.
+
+Estructura:
+1. RESPUESTA DIRECTA.
+2. EXPLICACIÓN CLARA.
+3. EJEMPLO.
+4. APLICACIÓN EN LA VIDA COTIDIANA.
+5. ERROR COMÚN.
+6. VERIFICACIÓN: pide que escriba qué entendió, dé un ejemplo y explique cómo lo usaría.
+
+Usa pedagogía, didáctica, analogías, comparación, pensamiento crítico, DBA y desarrollo de competencias.
+`;
+
+let client = null;
+
+function initSupabase(){
+  if(SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase){
+    client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    statusBox.textContent = "Conectado";
+    statusBox.style.background = "#e6f4ea";
+    statusBox.style.color = "#155724";
+  }
+}
+initSupabase();
+
+function escapeHtml(text){
+  return String(text).replace(/[&<>"']/g, function(m){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m];
+  });
+}
+function clearEmpty(){
+  const empty = document.getElementById("emptyState");
+  if(empty) empty.remove();
+}
+function mini(){
+  return '<div class="mini"><img src="assets/sabi-oficial.png" alt="SABI"></div>';
+}
+function addMessage(type,text){
+  clearEmpty();
+  const div = document.createElement("div");
+  div.className = "msg " + type;
+  if(type === "sabi"){
+    div.innerHTML = mini() + "<div>" + escapeHtml(text) + "</div>";
+  }else{
+    div.textContent = text;
+  }
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+  return div;
+}
+
+async function callAI(userQuestion){
+  if(!client){
+    throw new Error("SABI aún no está conectado al motor de IA. Falta configurar SUPABASE_URL, SUPABASE_ANON_KEY y la función real.");
+  }
+
+  let lastError = null;
+  for(const fn of FUNCTION_NAMES_TO_TRY){
+    try{
+      const {data,error} = await client.functions.invoke(fn,{
+        body:{pregunta:userQuestion,question:userQuestion,prompt:promptMaestro}
+      });
+      if(error){lastError = error; continue;}
+      const answer = data?.respuesta || data?.answer || data?.message || data?.text || data?.content;
+      if(answer) return answer;
+      lastError = new Error("La función " + fn + " no devolvió texto.");
+    }catch(e){
+      lastError = e;
+    }
+  }
+  throw lastError || new Error("No se encontró función IA activa.");
+}
+
+async function askSabi(){
+  const text = question.value.trim();
+  if(!text){question.focus();return;}
+
+  addMessage("user", text);
+  question.value = "";
+  question.focus();
+
+  const loading = addMessage("sabi", "Pensando...");
+
+  try{
+    const answer = await callAI(text);
+    loading.remove();
+    addMessage("sabi", answer);
+  }catch(e){
+    loading.remove();
+    addMessage("sabi", e.message);
+  }
+}
+
+question.addEventListener("keydown", function(e){
+  if(e.key === "Enter" && !e.shiftKey){
+    e.preventDefault();
+    askSabi();
+  }
+});
+question.focus();
+</script>
+</body>
+</html>
