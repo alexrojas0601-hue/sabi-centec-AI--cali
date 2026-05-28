@@ -1,381 +1,148 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <title>SABI AI CENTEC CALI</title>
+<meta name="description" content="SABI AI CENTEC CALI: tutor académico inteligente para responder, explicar y generar aprendizaje significativo.">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{
-  --azul:#082b63;
-  --azul2:#0f4c81;
-  --naranja:#f28c28;
-  --amarillo:#ffd166;
-  --fondo:#f4f7fb;
-  --texto:#102033;
-  --borde:#d8e2ee;
-  --usuario:#e8f1ff;
-  --sabi:#fff8ee;
-}
+:root{--azul:#082b63;--azul2:#0f4c81;--naranja:#f28c28;--amarillo:#ffd166;--fondo:#f5f8fc;--texto:#102033;--borde:#d8e2ee;--card:#ffffff;--usuario:#e8f1ff;--sabi:#fffaf2}
 *{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:Arial,Helvetica,sans-serif;
-  background:var(--fondo);
-  color:var(--texto);
-  min-height:100vh;
-}
-header{
-  background:var(--azul);
-  color:white;
-  min-height:72px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:8px 16px;
-  position:sticky;
-  top:0;
-  z-index:20;
-  box-shadow:0 4px 14px rgba(0,0,0,.12);
-}
-.brand{display:flex;align-items:center;gap:12px}
-.brand img{
-  width:56px;
-  height:56px;
-  border-radius:50%;
-  object-fit:cover;
-  background:white;
-  border:2px solid white;
-}
-h1{font-size:1.65rem;line-height:1.05;font-weight:900}
-.sub{color:var(--amarillo);font-size:.86rem;font-weight:800;margin-top:2px}
-.frase{
-  max-width:470px;
-  background:rgba(255,255,255,.12);
-  border-left:4px solid var(--naranja);
-  padding:8px 12px;
-  border-radius:12px;
-  font-size:.9rem;
-  font-weight:800;
-  line-height:1.25;
-}
-.app{max-width:980px;margin:0 auto;padding:12px}
-.askbox{
-  background:white;
-  border:1px solid var(--borde);
-  border-radius:18px;
-  padding:14px;
-  box-shadow:0 6px 20px rgba(0,0,0,.06);
-  margin-bottom:12px;
-}
-.ask-title{font-size:1.08rem;font-weight:900;color:var(--azul);margin-bottom:8px}
-textarea{
-  width:100%;
-  min-height:92px;
-  border:1px solid #b9c9dc;
-  border-radius:14px;
-  padding:14px;
-  font-family:inherit;
-  font-size:1rem;
-  line-height:1.45;
-  resize:vertical;
-  outline:none;
-}
-textarea:focus{border-color:var(--azul2);box-shadow:0 0 0 3px rgba(15,76,129,.12)}
-.actions{display:grid;grid-template-columns:1fr 170px;gap:10px;margin-top:10px}
-button{border:0;border-radius:14px;padding:13px;font-weight:900;font-size:1rem;cursor:pointer}
-.send{color:white;background:linear-gradient(135deg,var(--azul2),var(--azul))}
-.new{color:var(--azul);background:#e8eef6}
-.chat{
-  background:white;
-  border:1px solid var(--borde);
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:0 6px 20px rgba(0,0,0,.06);
-}
-.chat-head{
-  padding:10px 14px;
-  font-weight:900;
-  color:var(--azul);
-  border-bottom:1px solid var(--borde);
-  background:#f8fbff;
-}
-#messages{min-height:340px;max-height:58vh;overflow-y:auto;padding:14px}
-.msg{
-  padding:14px 16px;
-  border-radius:16px;
-  margin-bottom:12px;
-  line-height:1.55;
-  white-space:pre-wrap;
-  font-size:1rem;
-}
-.user{background:var(--usuario);border:1px solid #bdd7ff;margin-left:12%}
-.sabi{
-  background:var(--sabi);
-  border:1px solid #ffd18f;
-  position:relative;
-  padding-left:58px;
-}
-.mini{
-  position:absolute;
-  left:14px;
-  top:14px;
-  width:32px;
-  height:32px;
-  border-radius:50%;
-  overflow:hidden;
-  background:white;
-  box-shadow:0 3px 8px rgba(0,0,0,.16);
-}
+html,body{height:100%}
+body{font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#f6f9fd,#eef3f8);color:var(--texto);display:flex;flex-direction:column}
+header{min-height:72px;background:var(--azul);color:white;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:9px 18px;box-shadow:0 6px 18px rgba(0,0,0,.16)}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand img{width:56px;height:56px;border-radius:50%;object-fit:cover;background:white;border:2px solid white;flex:0 0 auto}
+.brand h1{font-size:clamp(1.15rem,2.5vw,1.65rem);line-height:1.05;font-weight:900;letter-spacing:.2px}
+.brand .sub{color:var(--amarillo);font-size:.82rem;font-weight:800;margin-top:4px}
+.frase{max-width:480px;background:rgba(255,255,255,.12);border-left:4px solid var(--naranja);border-radius:12px;padding:8px 12px;font-size:.86rem;line-height:1.28;font-weight:800}
+.app{width:min(980px,100%);margin:0 auto;padding:18px 14px 16px;flex:1;min-height:0;display:flex;flex-direction:column;gap:14px}
+.input-card{background:var(--card);border:1px solid var(--borde);border-radius:22px;box-shadow:0 10px 30px rgba(8,43,99,.08);padding:14px}
+.input-row{display:flex;align-items:flex-start;gap:12px}
+.input-row img{width:42px;height:42px;border-radius:50%;object-fit:cover;background:white;border:1px solid #e4edf7;flex:0 0 auto}
+.input-wrap{position:relative;flex:1}
+textarea{width:100%;min-height:74px;max-height:180px;border:1.5px solid #c7d7eb;background:#fbfdff;border-radius:18px;padding:16px 58px 16px 18px;font-family:inherit;font-size:1.08rem;line-height:1.45;resize:vertical;outline:none}
+textarea:focus{border-color:var(--azul2);background:white;box-shadow:0 0 0 4px rgba(15,76,129,.10)}
+.send-fab{position:absolute;right:12px;top:12px;width:40px;height:40px;border:0;border-radius:50%;background:linear-gradient(135deg,var(--azul2),var(--azul));color:white;font-size:1.25rem;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(8,43,99,.22)}
+.hint{margin:9px 0 0 56px;color:#64748b;font-size:.82rem}
+.chat{background:var(--card);border:1px solid var(--borde);border-radius:22px;box-shadow:0 10px 30px rgba(8,43,99,.08);overflow:hidden;flex:1;min-height:0;display:flex;flex-direction:column}
+.chat-head{padding:11px 16px;border-bottom:1px solid var(--borde);background:#f8fbff;display:flex;align-items:center;justify-content:space-between;color:var(--azul);font-weight:900}
+.status{font-size:.76rem;color:#155724;background:#e6f4ea;padding:4px 9px;border-radius:999px}
+#messages{flex:1;min-height:320px;overflow-y:auto;padding:16px}
+.empty{height:100%;min-height:260px;display:flex;align-items:center;justify-content:center;text-align:center;color:#6b7b90;padding:24px}
+.empty strong{display:block;color:var(--azul);font-size:1.25rem;margin-bottom:8px}
+.msg{max-width:88%;padding:14px 16px;border-radius:18px;margin-bottom:14px;line-height:1.6;white-space:pre-wrap;font-size:1rem}
+.user{margin-left:auto;background:var(--usuario);border:1px solid #bdd7ff}
+.sabi{margin-right:auto;background:var(--sabi);border:1px solid #ffd18f;position:relative;padding-left:58px}
+.mini{position:absolute;left:14px;top:14px;width:32px;height:32px;border-radius:50%;overflow:hidden;background:white;box-shadow:0 3px 8px rgba(0,0,0,.14)}
 .mini img{width:100%;height:100%;object-fit:cover}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.chip{
-  background:#edf5ff;
-  color:var(--azul);
-  border:1px solid #c9def7;
-  padding:8px 10px;
-  border-radius:999px;
-  font-size:.88rem;
-  font-weight:800;
-}
-@media(max-width:760px){
-  header{height:auto;align-items:flex-start;flex-direction:column}
-  h1{font-size:1.35rem}
-  .frase{max-width:100%}
-  .actions{grid-template-columns:1fr}
-  .user{margin-left:0}
-}
+.loading{opacity:.72}
+.footer{text-align:center;font-size:.82rem;color:#64748b;padding-bottom:4px}
+.footer span{color:var(--azul);font-weight:800}
+@media(max-width:760px){header{align-items:flex-start;flex-direction:column}.frase{max-width:100%}.input-row img{display:none}.hint{margin-left:4px}.msg{max-width:100%}}
 </style>
 </head>
 <body>
 <header>
   <div class="brand">
-    <img src="assets/avatar.png" alt="SABI">
-    <div>
-      <h1>SABI AI CENTEC CALI</h1>
-      <div class="sub">Saber • Aprender • Brillar • Imaginar</div>
-    </div>
+    <img src="assets/avatar-sabi.png" alt="Avatar oficial SABI">
+    <div><h1>SABI AI CENTEC CALI</h1><div class="sub">Saber • Aprender • Brillar • Imaginar</div></div>
   </div>
   <div class="frase">“El error no nos detiene. Nos enseña, nos fortalece y nos hace crecer.”</div>
 </header>
-
 <main class="app">
-  <section class="askbox">
-    <div class="ask-title">Pregunta a SABI</div>
-    <textarea id="question" placeholder="Escribe tu pregunta aquí. Ejemplo: ¿Qué es un ángulo agudo?"></textarea>
-    <div class="actions">
-      <button class="send" onclick="ask()">Preguntar</button>
-      <button class="new" onclick="resetChat()">Nueva conversación</button>
+  <section class="input-card">
+    <div class="input-row">
+      <img src="assets/avatar-sabi.png" alt="SABI">
+      <div class="input-wrap">
+        <textarea id="question" placeholder="Escribe tu pregunta aquí y presiona Enter..."></textarea>
+        <button class="send-fab" onclick="askSabi()" title="Enviar">➤</button>
+      </div>
     </div>
-    <div class="chips">
-      <button class="chip" onclick="example('¿Qué es un ángulo agudo?')">Ángulo agudo</button>
-      <button class="chip" onclick="example('¿Qué es la teoría idealista?')">Teoría idealista</button>
-      <button class="chip" onclick="example('¿Cuál es la capital de Italia?')">Capital de Italia</button>
-      <button class="chip" onclick="example('Explícame las fracciones')">Fracciones</button>
-    </div>
+    <div class="hint">Enter = preguntar · Shift + Enter = salto de línea</div>
   </section>
-
   <section class="chat">
-    <div class="chat-head">Respuesta de SABI</div>
-    <div id="messages"></div>
+    <div class="chat-head"><span>Respuesta de SABI</span><span class="status" id="status">Preparado</span></div>
+    <div id="messages">
+      <div class="empty" id="emptyState"><div><strong>SABI está listo.</strong>Pregunta lo que necesites aprender.</div></div>
+    </div>
   </section>
+  <div class="footer"><span>@colegiocentecoficial</span> · <span>@colegiocentec</span> · Calle 54 #41E3-57 · Cali</div>
 </main>
-
 <script>
-const q=document.getElementById("question");
-const messages=document.getElementById("messages");
+const SUPABASE_URL = "";
+const SUPABASE_ANON_KEY = "";
+const FUNCTION_NAMES_TO_TRY = ["sabi-chat","chat","sabi","ask-sabi"];
 
-function normalizeText(t){
-  return t.toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-    .replace(/[¿?.,;:!]/g," ")
-    .replace(/\s+/g," ")
-    .trim();
+const question = document.getElementById("question");
+const messages = document.getElementById("messages");
+const statusBox = document.getElementById("status");
+
+const promptMaestro = `
+Actúa como SABI AI CENTEC CALI, una IA académica/tutor digital.
+Tu misión es dar respuestas correctas y convertir cada pregunta en aprendizaje significativo.
+
+Estructura obligatoria:
+1. RESPUESTA DIRECTA: corta, precisa y correcta.
+2. EXPLICACIÓN CLARA: enseña el concepto de manera sencilla.
+3. EJEMPLO: usa un ejemplo cotidiano o académico.
+4. APLICACIÓN EN LA VIDA COTIDIANA: explica para qué sirve.
+5. ERROR COMÚN: advierte una confusión frecuente.
+6. VERIFICACIÓN: pide al usuario escribir qué entendió, dar un ejemplo y explicar cómo lo usaría.
+
+Reglas:
+- No evadas.
+- No inventes.
+- Si no estás seguro o requiere actualidad, dilo.
+- Usa pedagogía, didáctica, analogías, comparación, pensamiento crítico y claridad.
+- El tono debe ser humano, cálido, motivador, exigente y académico.
+`;
+
+let client = null;
+function initSupabase(){
+  if(SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase){
+    client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    statusBox.textContent = "Conectado";
+  }else{statusBox.textContent = "Sin conexión IA";}
 }
-function mini(){return '<div class="mini"><img src="assets/avatar.png" alt="SABI"></div>'}
-function add(type,text){
-  const d=document.createElement("div");
-  d.className="msg "+type;
-  if(type==="sabi"){d.innerHTML=mini()+"<div>"+text+"</div>"}else{d.textContent=text}
-  messages.appendChild(d);
-  messages.scrollTop=messages.scrollHeight;
+initSupabase();
+
+function escapeHtml(text){return String(text).replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m];});}
+function clearEmpty(){const empty=document.getElementById("emptyState");if(empty) empty.remove();}
+function mini(){return '<div class="mini"><img src="assets/avatar-sabi.png" alt="SABI"></div>';}
+function addMessage(type,text,extraClass=""){
+  clearEmpty();
+  const div=document.createElement("div");
+  div.className="msg "+type+" "+extraClass;
+  if(type==="sabi"){div.innerHTML=mini()+"<div>"+escapeHtml(text)+"</div>";}else{div.textContent=text;}
+  messages.appendChild(div);messages.scrollTop=messages.scrollHeight;return div;
 }
-function example(text){q.value=text;q.focus()}
-
-function response(input){
-  const t=normalizeText(input);
-
-  if(t.includes("angulo agudo") || t.includes("ángulo agudo")){
-    return `RESPUESTA DIRECTA:
-Un ángulo agudo es un ángulo que mide más de 0 grados y menos de 90 grados.
-
-EXPLICACIÓN PEDAGÓGICA:
-Un ángulo se forma cuando dos líneas se unen en un punto llamado vértice.
-Si la abertura entre esas dos líneas es pequeña, menor que una esquina recta, entonces hablamos de un ángulo agudo.
-
-Comparación:
-• Ángulo agudo: menos de 90°
-• Ángulo recto: exactamente 90°
-• Ángulo obtuso: más de 90° y menos de 180°
-
-EJEMPLO VISUAL:
-Imagina una puerta apenas abierta. La abertura pequeña que se forma puede parecerse a un ángulo agudo.
-
-EJEMPLOS DE ÁNGULOS AGUDOS:
-• 20°
-• 35°
-• 45°
-• 60°
-• 89°
-
-NO SON AGUDOS:
-• 90° porque es recto.
-• 120° porque es obtuso.
-
-APLICACIÓN EN LA VIDA COTIDIANA:
-Los ángulos agudos aparecen en techos, señales de tránsito, dibujos geométricos, arquitectura, diseño, carpintería, rampas, tijeras abiertas y objetos triangulares.
-
-ERROR COMÚN:
-Pensar que 90° es agudo. No. 90° es ángulo recto.
-
-VERIFICACIÓN:
-• Explica con tus palabras qué es un ángulo agudo.
-• Da un ejemplo de la vida diaria donde veas uno.
-• Responde: ¿75° es un ángulo agudo? ¿Por qué?`;
+async function callSupabaseAI(userQuestion){
+  if(!client){throw new Error("SABI todavía no está conectado al motor de IA. Pegue SUPABASE_URL, SUPABASE_ANON_KEY y el nombre de la función real en index.html.");}
+  let lastError=null;
+  for(const fn of FUNCTION_NAMES_TO_TRY){
+    try{
+      const {data,error}=await client.functions.invoke(fn,{body:{pregunta:userQuestion,question:userQuestion,prompt:promptMaestro}});
+      if(error){lastError=error;continue;}
+      const answer=data?.respuesta||data?.answer||data?.message||data?.text||data?.content;
+      if(answer) return answer;
+      lastError=new Error("La función "+fn+" respondió sin texto.");
+    }catch(e){lastError=e;}
   }
-
-  if(t.includes("capital de roma")){
-    return `RESPUESTA DIRECTA:
-La pregunta está mal formulada, porque Roma no es un país. Roma es una ciudad.
-
-La forma correcta sería:
-¿Cuál es la capital de Italia?
-
-Respuesta correcta:
-La capital de Italia es Roma.
-
-EXPLICACIÓN PEDAGÓGICA:
-Un país puede tener una ciudad capital. Italia es el país. Roma es la ciudad capital.
-
-EJEMPLO:
-Colombia es el país y Bogotá es su capital.
-
-APLICACIÓN EN LA VIDA COTIDIANA:
-Esto sirve para ubicarnos mejor en geografía, noticias, mapas, viajes y cultura general.
-
-VERIFICACIÓN:
-• Escribe con tus palabras cuál fue el error de la pregunta.
-• Da otro ejemplo de país y capital.`;
-  }
-
-  if(t.includes("capital de italia")){
-    return `RESPUESTA DIRECTA:
-La capital de Italia es Roma.
-
-EXPLICACIÓN PEDAGÓGICA:
-Italia es un país europeo. Roma es su ciudad capital.
-
-EJEMPLO:
-Colombia es país y Bogotá es capital.
-Italia es país y Roma es capital.
-
-APLICACIÓN EN LA VIDA COTIDIANA:
-Sirve para entender noticias internacionales, mapas, historia, cultura y turismo.
-
-VERIFICACIÓN:
-• Escríbelo con tus palabras.
-• Da un ejemplo parecido con otro país.`;
-  }
-
-  if(t.includes("teoria idealista") || t.includes("idealismo")){
-    return `RESPUESTA DIRECTA:
-La teoría idealista es una corriente filosófica que sostiene que las ideas, la mente o la conciencia son fundamentales para comprender la realidad.
-
-EXPLICACIÓN PEDAGÓGICA:
-El idealismo enseña que no entendemos el mundo solo por lo que tocamos o vemos, sino también por las ideas que tenemos en la mente.
-
-Dicho de forma sencilla:
-primero pensamos, interpretamos y damos sentido; después actuamos sobre la realidad.
-
-EJEMPLO COTIDIANO:
-Dos estudiantes pueden recibir la misma nota baja.
-Uno piensa: “soy malo para estudiar”.
-Otro piensa: “debo cambiar mi método”.
-La situación material es la misma, pero la idea cambia la forma de actuar.
-
-AUTORES RELACIONADOS:
-• Platón
-• Kant
-• Hegel
-
-APLICACIÓN EN LA VIDA COTIDIANA:
-Sirve para entender que nuestras ideas influyen en decisiones, emociones, metas y forma de transformar la vida.
-
-ERROR COMÚN:
-Creer que idealismo significa “soñar bonito”. No es eso. Es una teoría filosófica sobre el papel de las ideas en la realidad.
-
-VERIFICACIÓN:
-• Explica con tus palabras qué entendiste por teoría idealista.
-• Da un ejemplo de una idea que pueda cambiar la vida de una persona.
-• ¿Para qué puede servir este concepto en tu vida diaria?`;
-  }
-
-  if(t.includes("fraccion") || t.includes("fracciones")){
-    return `RESPUESTA DIRECTA:
-Una fracción representa una parte de un todo.
-
-EXPLICACIÓN PEDAGÓGICA:
-Una fracción tiene dos partes:
-• Numerador: indica cuántas partes tomamos.
-• Denominador: indica en cuántas partes iguales se dividió el todo.
-
-EJEMPLO:
-Si una pizza se divide en 4 partes iguales y comes 1, comiste 1/4.
-
-APLICACIÓN EN LA VIDA COTIDIANA:
-Las fracciones sirven para cocinar, repartir dinero, medir terrenos, dividir alimentos y entender descuentos.
-
-ERROR COMÚN:
-Pensar que el número de abajo se ignora. No. El denominador indica el tamaño de las partes.
-
-VERIFICACIÓN:
-• Explica con tus palabras qué es una fracción.
-• Da un ejemplo usando una pizza, una torta o dinero.
-• ¿Dónde usarías fracciones en tu vida diaria?`;
-  }
-
-  return `RESPUESTA DIRECTA:
-No tengo una respuesta específica programada para esa pregunta en esta versión local.
-
-EXPLICACIÓN PEDAGÓGICA:
-Para que SABI responda cualquier tema como una verdadera IA, debe conectarse a un motor de inteligencia artificial. Esta versión funciona sin backend y solo responde correctamente los temas que ya fueron programados.
-
-Lo correcto para esta pregunta sería:
-1. identificar el concepto central,
-2. definirlo con precisión,
-3. explicarlo con ejemplos,
-4. mostrar su uso cotidiano,
-5. pedirte que expliques lo aprendido.
-
-VERIFICACIÓN:
-Escribe la pregunta con una palabra clave más concreta o conectemos SABI a un motor real de IA para responder cualquier tema.`;
+  throw lastError||new Error("No se encontró función IA activa.");
 }
-
-function ask(){
-  const text=q.value.trim();
-  if(!text){q.focus();return}
-  add("user",text);
-  setTimeout(()=>add("sabi",response(text)),120);
-  q.value="";
-  q.focus();
+async function askSabi(){
+  const text=question.value.trim();
+  if(!text){question.focus();return;}
+  addMessage("user",text);
+  question.value="";question.focus();
+  const loading=addMessage("sabi","Pensando...","loading");
+  try{const answer=await callSupabaseAI(text);loading.remove();addMessage("sabi",answer);}
+  catch(e){loading.remove();addMessage("sabi",e.message);}
 }
-function resetChat(){
-  messages.innerHTML="";
-  q.focus();
-}
-q.addEventListener("keydown",e=>{
-  if(e.key==="Enter" && (e.ctrlKey || e.metaKey)) ask();
-});
-q.focus();
+question.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();askSabi();}});
+question.focus();
 </script>
 </body>
 </html>
