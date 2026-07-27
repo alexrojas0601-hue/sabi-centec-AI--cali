@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SABI Tutor CENTEC</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#0b1220;
+    color:#e5e7eb;
+}
+
+.header{
+    text-align:center;
+    padding:30px;
+}
+
+.header h1{
+    margin:0;
+    color:#38bdf8;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:20px;
+}
+
+.card{
+    background:#111827;
+    padding:30px;
+    border-radius:16px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+input{
+    width:100%;
+    padding:14px;
+    margin-top:12px;
+    border-radius:10px;
+    border:none;
+    background:#1f2937;
+    color:white;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border:none;
+    border-radius:10px;
+    background:#22c55e;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.output{
+    margin-top:20px;
+    background:#0f172a;
+    padding:20px;
+    border-radius:12px;
+    line-height:1.6;
+}
+
+.badge{
+    display:inline-block;
+    background:#38bdf8;
+    padding:6px 12px;
+    border-radius:8px;
+    margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>SABI Tutor CENTEC</h1>
+    <p>Maestro tutor basado en DBA - MEN Colombia</p>
+</div>
+
+<div class="container">
+    <div class="card">
+
+        <input id="concept" placeholder="Concepto (ej: fracciones)">
+        <input id="answer" placeholder="Respuesta del estudiante">
+
+        <button onclick="runSABI()">Evaluar aprendizaje</button>
+
+        <div class="output" id="output"></div>
+
+    </div>
+</div>
+
+<script>
+
+let mastery = 0.3;
+
+function detectConcept(text){
+    if(text.includes("fracción")) return "fracciones";
+    if(text.includes("dividir")) return "division";
+    return "general";
+}
+
+function evaluate(concept, answer){
+    if(concept==="fracciones"){
+        return answer.includes("1/2") || answer.includes("2/4") || answer.includes("0.5");
+    }
+    if(concept==="division"){
+        return answer.includes("2");
+    }
+    return false;
+}
+
+function teach(m){
+    if(m < 0.3){
+        return "Nivel básico: usa ejemplos como pizza o dinero.";
+    }
+    if(m < 0.7){
+        return "Nivel medio: comprensión de partes del todo.";
+    }
+    return "Nivel alto: relación matemática formal.";
+}
+
+function runSABI(){
+
+    const c = document.getElementById("concept").value;
+    const a = document.getElementById("answer").value;
+
+    const concept = detectConcept(c);
+    const ok = evaluate(concept,a);
+
+    if(ok) mastery += 0.15;
+    else mastery -= 0.1;
+
+    if(mastery < 0) mastery = 0;
+    if(mastery > 1) mastery = 1;
+
+    const msg = teach(mastery);
+
+    document.getElementById("output").innerHTML = `
+        <h3>Concepto: ${concept}</h3>
+        <div class="badge">Dominio: ${mastery.toFixed(2)}</div>
+        <p>${msg}</p>
+        <h3>${mastery > 0.8 ? "✔ DOMINADO" : "🔁 EN PROCESO"}</h3>
+    `;
+}
+
+</script>
+
+</body>
+</html>
