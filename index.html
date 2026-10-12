@@ -93,6 +93,7 @@
     .acciones .secundario{background:#fff;color:#073B7A;border:2px solid #073B7A}
     .acciones a{background:#FF8A00;color:#fff;display:inline-flex;align-items:center}
     .tablaWrap{overflow-x:auto;margin:6px 0 18px;border-radius:12px;border:1px solid #D8E5F8}.tablaSabi{border-collapse:collapse;width:100%;font-family:'Public Sans',system-ui,sans-serif;font-size:15px;line-height:1.5}.tablaSabi th{background:#1A2D7A;color:#fff;text-align:left;padding:10px 12px;font-weight:700}.tablaSabi td{padding:9px 12px;border-top:1px solid #E3ECF8;vertical-align:top}.tablaSabi tr:nth-child(even) td{background:#F5F8FD}
+    .cfCard{display:flex;gap:16px;align-items:flex-start;border-left:6px solid #1A2D7A;background:#F2F6FD;border-radius:12px;padding:14px 18px;margin-bottom:18px;font-family:'Public Sans',system-ui,sans-serif;font-size:16px;line-height:1.6;color:#1F1D1A}.cfCard img{width:140px;max-height:140px;object-fit:cover;border-radius:10px;flex-shrink:0;background:#fff}.cfCard p{margin:0 0 8px}.cfCard a{color:#1A2D7A}@media(max-width:600px){.cfCard{flex-direction:column}.cfCard img{width:100%;max-height:200px}}
     .vivoCard{border-left:6px solid #F47C20;background:#FFF7EF;border-radius:12px;padding:14px 18px;margin-bottom:18px;font-family:'Public Sans',system-ui,sans-serif;font-size:16px;line-height:1.6;color:#1F1D1A}.vivoCard p{margin:0 0 8px}.vivoCard ol{margin:0;padding-left:20px}.vivoCard a{color:#1A2D7A}.vivoTitulo{font-weight:800;color:#1A2D7A;text-transform:uppercase;font-size:13px;letter-spacing:.04em;margin-bottom:8px}.vivoFuente{color:#4B5A70;font-size:14px}
     .sello{margin-top:14px;font-family:'Public Sans',system-ui,sans-serif;font-size:14px;color:#4B5A70;border-top:1px solid #D8E5F8;padding-top:10px}
     .retos{background:#fff;border:1px solid var(--borde);border-radius:18px;padding:clamp(18px,2.5vw,28px)}
@@ -152,6 +153,38 @@ async function traerActualidad(pa){
     const d = await r.json();
     return (d.clima || d.noticias) ? d : null;
   }catch(e){ return null; }
+}
+
+const COMOFUNCIONA_URL = "https://ai.sabicentec.com/api/comofunciona";    // cómo funcionan las cosas (Wikipedia en español)
+
+function pideComoFunciona(q){
+  const n = norm(q);
+  return /(como (funciona|funcionan|trabaja|trabajan|opera|operan|se hace|se hacen|se fabrica|se fabrican|se produce|se producen|se elabora|se elaboran)|funcionamiento de|por dentro|para que sirve)/.test(n);
+}
+
+async function traerComoFunciona(q){
+  try{
+    const c=new AbortController(), t=setTimeout(function(){c.abort();}, 12000);
+    const r = await fetch(COMOFUNCIONA_URL+'?q='+encodeURIComponent(q), {signal:c.signal});
+    clearTimeout(t);
+    if(!r.ok) return null;
+    const d = await r.json();
+    return d.ok ? d : null;
+  }catch(e){ return null; }
+}
+
+function contextoComoFunciona(w){
+  let t = 'FUENTE VERIFICADA (' + w.fuente + ', artículo "' + w.titulo + '"). Explica con base en esta información, paso a paso, con un ejemplo de la vida diaria en Cali y una analogía sencilla. No inventes datos que contradigan la fuente.\nRESUMEN: ' + w.resumen + '\n';
+  if(w.funcionamiento) t += 'CÓMO FUNCIONA (' + w.funcionamiento.seccion + '): ' + w.funcionamiento.texto + '\n';
+  return t;
+}
+
+function comoFuncionaHtml(w){
+  if(!w) return '';
+  return '<div class="cfCard">' + (w.imagen ? '<img src="' + escapeHtml(w.imagen) + '" alt="' + escapeHtml(w.titulo) + '">' : '')
+    + '<div><div class="vivoTitulo">¿Cómo funciona? · ' + escapeHtml(w.titulo) + '</div>'
+    + '<p>' + escapeHtml(w.resumen.split('\n')[0]) + '</p>'
+    + '<p class="vivoFuente"><a href="' + escapeHtml(w.url) + '" target="_blank" rel="noopener">Leer en ' + escapeHtml(w.fuente) + '</a> · <a href="' + escapeHtml(w.video) + '" target="_blank" rel="noopener">Ver animaciones en video</a> · Licencia ' + escapeHtml(w.licencia) + '</p></div></div>';
 }
 
 function contextoVivo(v){
@@ -529,7 +562,9 @@ async function askSabi(){
   const vivo = (pa.clima || pa.noticias) ? await traerActualidad(pa) : null;
   const pideCuadro = /\b(cuadro|tabla|cronograma|horario|planeador|planeacion|matriz|plan de actividades)\b/.test(norm(q));
   const formatoCuadro = pideCuadro ? '\n\nFORMATO OBLIGATORIO: entrega el cuadro COMPLETO como tabla markdown (| columna | columna |, con fila de encabezado y fila separadora |---|), con TODAS las filas y columnas pedidas, sin resumir ni cortar. Después de la tabla, máximo 3 líneas de explicación.' : '';
-  const preguntaIA = (vivo ? contextoVivo(vivo) + '\nPREGUNTA: ' + q : q) + formatoCuadro;
+  const wikiCF = pideComoFunciona(q) ? await traerComoFunciona(q) : null;
+  const contexto = (vivo ? contextoVivo(vivo) : '') + (wikiCF ? contextoComoFunciona(wikiCF) : '');
+  const preguntaIA = (contexto ? contexto + '\nPREGUNTA: ' + q : q) + formatoCuadro;
   try{
     // 1. IA institucional: agente Maestro + Auditor del sello SABI
     const d = await pedir(INSTITUCIONAL_URL, { pregunta:preguntaIA, audiencia:audienciaElegida, grado:document.getElementById('grado').value, area:detectArea(q) }, 90000);
@@ -537,21 +572,21 @@ async function askSabi(){
   }catch(e1){
     try{
       // 2. Respaldo: sistema anterior
-      const d = await pedir(BACKEND_URL, { message:(vivo ? contextoVivo(vivo) + '\n' : '') + buildSabiPrompt(q), nombre:'Estudiante', grado:'' }, 60000);
+      const d = await pedir(BACKEND_URL, { message:(contexto ? contexto + '\n' : '') + buildSabiPrompt(q), nombre:'Estudiante', grado:'' }, 60000);
       texto = d.answer || d.respuesta || '';
     }catch(e2){ texto = ''; }
   }
   try{
     if(!texto) throw new Error('sin respuesta');
     const respuestaFinal = academicNotation(texto);
-    answer.innerHTML = vivoHtml(vivo) + '<div id="respuestaTexto">'+formatAnswer(respuestaFinal)+'</div>' + accionesHtml(q) + buildLesson(q, respuestaFinal)
+    answer.innerHTML = vivoHtml(vivo) + comoFuncionaHtml(wikiCF) + '<div id="respuestaTexto">'+formatAnswer(respuestaFinal)+'</div>' + accionesHtml(q) + buildLesson(q, respuestaFinal)
       + '<p class="sello">'+(revisada ? 'Respuesta revisada por el Auditor del sello SABI: pedagógica, científica y sin sesgo político. ' : '')+'SABI puede equivocarse: si algo no te convence, verifícalo con tu docente.</p>';
     renderMath();
     stateText.textContent = 'Microclase adaptativa activa';
   }catch(err){
     document.body.classList.add('offline');
     const r = offlineAcademicResponse(q);
-    answer.innerHTML = vivo ? vivoHtml(vivo) : (formatAnswer(r) + buildLesson(q, r));
+    answer.innerHTML = (vivo || wikiCF) ? (vivoHtml(vivo) + comoFuncionaHtml(wikiCF)) : (formatAnswer(r) + buildLesson(q, r));
     renderMath();
     stateText.textContent = 'Microclase offline';
   }finally{
