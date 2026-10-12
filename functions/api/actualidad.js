@@ -1,6 +1,7 @@
 // AI CENTEC · Datos en vivo de Cali (clima + noticias del día)
 // Cloudflare Pages Function → https://ai.sabicentec.com/api/actualidad?clima=1&noticias=1
 // Clima: Open-Meteo (gratis, sin clave). Noticias: Google Noticias RSS (últimas 24 h), respaldo GDELT.
+// ?frente=cali | colombia | mundo | educacion  (por defecto cali)
 
 const CALI = { lat: 3.4516, lon: -76.532 };
 const TZ = 'America/Bogota';
@@ -66,8 +67,19 @@ function etiqueta(xml, tag) {
   return m ? limpiar(m[1]) : '';
 }
 
-async function noticiasGoogle() {
-  const url = 'https://news.google.com/rss/search?q=Cali+when:1d&hl=es-419&gl=CO&ceid=CO:es-419';
+// Frentes de actualidad: qué buscar en Google Noticias y en GDELT
+const FRENTES = {
+  cali:      { google: 'Cali when:1d', gdelt: 'Cali sourcecountry:colombia' },
+  colombia:  { google: 'Colombia when:1d', gdelt: 'Colombia sourcecountry:colombia' },
+  mundo:     { google: null, gdelt: 'sourcelang:spanish' },
+  educacion: { google: '(MEN OR ICFES OR "Ministerio de Educación" OR colegios) Colombia when:2d', gdelt: '(ICFES OR "Ministerio de Educacion") sourcecountry:colombia' },
+};
+
+async function noticiasGoogle(frente) {
+  const f = FRENTES[frente] || FRENTES.cali;
+  const url = f.google
+    ? 'https://news.google.com/rss/search?q=' + encodeURIComponent(f.google) + '&hl=es-419&gl=CO&ceid=CO:es-419'
+    : 'https://news.google.com/rss/headlines/section/topic/WORLD?hl=es-419&gl=CO&ceid=CO:es-419';
   const r = await fetch(url, {
     headers: { 'User-Agent': 'Mozilla/5.0 (AI CENTEC; +https://ai.sabicentec.com)' },
     cf: { cacheTtl: 900 },
@@ -84,8 +96,9 @@ async function noticiasGoogle() {
   return items;
 }
 
-async function noticiasGdelt() {
-  const url = 'https://api.gdeltproject.org/api/v2/doc/doc?query=Cali%20sourcecountry:colombia&mode=artlist&maxrecords=6&timespan=1d&sort=hybridrel&format=json';
+async function noticiasGdelt(frente) {
+  const f = FRENTES[frente] || FRENTES.cali;
+  const url = 'https://api.gdeltproject.org/api/v2/doc/doc?query=' + encodeURIComponent(f.gdelt) + '&mode=artlist&maxrecords=6&timespan=1d&sort=hybridrel&format=json';
   const r = await fetch(url, { cf: { cacheTtl: 900 } });
   if (!r.ok) throw new Error('gdelt HTTP ' + r.status);
   const d = await r.json();
@@ -94,8 +107,8 @@ async function noticiasGdelt() {
   return items;
 }
 
-async function traerNoticias() {
-  try { return await noticiasGoogle(); } catch (e) { return await noticiasGdelt(); }
+async function traerNoticias(frente) {
+  try { return await noticiasGoogle(frente); } catch (e) { return await noticiasGdelt(frente); }
 }
 
 export async function onRequestOptions() {
@@ -106,11 +119,12 @@ export async function onRequestGet({ request }) {
   const p = new URL(request.url).searchParams;
   const quiereClima = p.get('clima') !== '0';
   const quiereNoticias = p.get('noticias') !== '0';
-  const res = { ok: true, ciudad: 'Cali, Colombia', consultado: ahoraBogota() };
+  const frente = FRENTES[p.get('frente')] ? p.get('frente') : 'cali';
+  const res = { ok: true, ciudad: 'Cali, Colombia', frente, consultado: ahoraBogota() };
 
   const [clima, noticias] = await Promise.allSettled([
     quiereClima ? traerClima() : Promise.resolve(null),
-    quiereNoticias ? traerNoticias() : Promise.resolve(null),
+    quiereNoticias ? traerNoticias(frente) : Promise.resolve(null),
   ]);
   if (clima.status === 'fulfilled' && clima.value) res.clima = clima.value;
   else if (quiereClima) res.climaError = String(clima.reason && clima.reason.message || clima.reason);

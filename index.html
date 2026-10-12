@@ -141,13 +141,16 @@ function pideActualidad(q){
   const n = norm(q);
   const clima = /\b(clima|temperatura|llover|lluvia|llueve|lloviendo|pronostico|calor|frio|soleado|nublado)\b/.test(n) || /tiempo (hace|hoy|en cali|para hoy)/.test(n);
   const noticias = /\b(noticia|noticias|titulares|actualidad|acontecimiento|acontecimientos)\b/.test(n) || /(que paso|que sucedio|que esta pasando|que hay de nuevo).*(hoy|cali)/.test(n);
-  return { clima, noticias };
+  const frente = /\b(mundo|mundial|internacional|planeta)\b/.test(n) ? 'mundo'
+    : /\b(educacion|icfes|ministerio de educacion|colegios|docentes|men)\b/.test(n) ? 'educacion'
+    : (/\bcolombia|pais|nacional\b/.test(n) && !/\bcali\b/.test(n)) ? 'colombia' : 'cali';
+  return { clima, noticias, frente };
 }
 
 async function traerActualidad(pa){
   try{
     const c=new AbortController(), t=setTimeout(function(){c.abort();}, 12000);
-    const r = await fetch(ACTUALIDAD_URL+'?clima='+(pa.clima?1:0)+'&noticias='+(pa.noticias?1:0), {signal:c.signal});
+    const r = await fetch(ACTUALIDAD_URL+'?clima='+(pa.clima?1:0)+'&noticias='+(pa.noticias?1:0)+'&frente='+pa.frente, {signal:c.signal});
     clearTimeout(t);
     if(!r.ok) return null;
     const d = await r.json();
@@ -194,7 +197,7 @@ function contextoVivo(v){
     t += 'CLIMA EN CALI HOY (' + c.fuente + '): ' + c.estado + ', ' + c.temperatura + ' °C ahora (sensación ' + c.sensacion + ' °C), máxima ' + c.maxima + ' °C, mínima ' + c.minima + ' °C, probabilidad de lluvia ' + c.probLluvia + ' %, humedad ' + c.humedad + ' %, viento ' + c.viento + ' km/h, índice UV máximo ' + c.uv + '.\n';
   }
   if(v.noticias && v.noticias.length){
-    t += 'NOTICIAS DE CALI DE LAS ÚLTIMAS 24 HORAS (en orden de relevancia):\n';
+    t += 'NOTICIAS DE ' + ({cali:'CALI',colombia:'COLOMBIA',mundo:'EL MUNDO',educacion:'EDUCACIÓN EN COLOMBIA'}[v.frente]||'CALI') + ' DE LAS ÚLTIMAS 24 HORAS (en orden de relevancia):\n';
     v.noticias.forEach(function(n,i){ t += (i+1) + '. ' + n.titulo + (n.fuente ? ' (' + n.fuente + ')' : '') + '\n'; });
   }
   return t;
