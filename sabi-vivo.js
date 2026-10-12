@@ -2,7 +2,7 @@
  * SABI EN VIVO · widget para todas las apps SABI CENTEC
  * Instalar en cualquier app, antes de </body>:
  *   <script src="https://ai.sabicentec.com/sabi-vivo.js" defer></script>
- * Opcional: data-frente="cali|colombia|mundo|educacion"  data-posicion="izquierda"
+ * Opcional: data-frente="cali|colombia|mundo|educacion"  data-posicion="derecha" (por defecto izquierda)
  * Muestra un botón flotante con: Hoy (clima de Cali + noticias del día) y ¿Cómo funciona? (Wikipedia).
  */
 (function () {
@@ -10,7 +10,7 @@
   var API = 'https://ai.sabicentec.com/api';
   var me = document.currentScript || {};
   var frenteInicial = (me.dataset && me.dataset.frente) || 'cali';
-  var izquierda = me.dataset && me.dataset.posicion === 'izquierda';
+  var izquierda = !(me.dataset && me.dataset.posicion === 'derecha'); // izquierda por defecto: a la derecha va el tutor de Superación
 
   function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]; }); }
   function getJSON(url) {
