@@ -92,6 +92,8 @@
     .acciones button,.acciones a{width:auto;border-radius:999px;padding:13px 22px;font-size:clamp(16px,1.1vw,18px);font-weight:800;text-decoration:none;box-shadow:none}
     .acciones .secundario{background:#fff;color:#073B7A;border:2px solid #073B7A}
     .acciones a{background:#FF8A00;color:#fff;display:inline-flex;align-items:center}
+    .tablaWrap{overflow-x:auto;margin:6px 0 18px;border-radius:12px;border:1px solid #D8E5F8}.tablaSabi{border-collapse:collapse;width:100%;font-family:'Public Sans',system-ui,sans-serif;font-size:15px;line-height:1.5}.tablaSabi th{background:#1A2D7A;color:#fff;text-align:left;padding:10px 12px;font-weight:700}.tablaSabi td{padding:9px 12px;border-top:1px solid #E3ECF8;vertical-align:top}.tablaSabi tr:nth-child(even) td{background:#F5F8FD}
+    .vivoCard{border-left:6px solid #F47C20;background:#FFF7EF;border-radius:12px;padding:14px 18px;margin-bottom:18px;font-family:'Public Sans',system-ui,sans-serif;font-size:16px;line-height:1.6;color:#1F1D1A}.vivoCard p{margin:0 0 8px}.vivoCard ol{margin:0;padding-left:20px}.vivoCard a{color:#1A2D7A}.vivoTitulo{font-weight:800;color:#1A2D7A;text-transform:uppercase;font-size:13px;letter-spacing:.04em;margin-bottom:8px}.vivoFuente{color:#4B5A70;font-size:14px}
     .sello{margin-top:14px;font-family:'Public Sans',system-ui,sans-serif;font-size:14px;color:#4B5A70;border-top:1px solid #D8E5F8;padding-top:10px}
     .retos{background:#fff;border:1px solid var(--borde);border-radius:18px;padding:clamp(18px,2.5vw,28px)}
     .retos h2{margin:0 0 6px;color:#073B7A;font-size:clamp(22px,1.8vw,28px)}
@@ -132,6 +134,53 @@
 const BACKEND_URL = "https://dawn-queen-d130.alexrojas0601.workers.dev";   // respaldo (sistema anterior)
 const SUPERACION = "https://superacion.sabicentec.com";
 const INSTITUCIONAL_URL = SUPERACION + "/api/institucional";              // IA institucional con Maestro + Auditor del sello SABI
+const ACTUALIDAD_URL = "https://ai.sabicentec.com/api/actualidad";         // datos en vivo de Cali: clima + noticias del día
+
+function pideActualidad(q){
+  const n = norm(q);
+  const clima = /\b(clima|temperatura|llover|lluvia|llueve|lloviendo|pronostico|calor|frio|soleado|nublado)\b/.test(n) || /tiempo (hace|hoy|en cali|para hoy)/.test(n);
+  const noticias = /\b(noticia|noticias|titulares|actualidad|acontecimiento|acontecimientos)\b/.test(n) || /(que paso|que sucedio|que esta pasando|que hay de nuevo).*(hoy|cali)/.test(n);
+  return { clima, noticias };
+}
+
+async function traerActualidad(pa){
+  try{
+    const c=new AbortController(), t=setTimeout(function(){c.abort();}, 12000);
+    const r = await fetch(ACTUALIDAD_URL+'?clima='+(pa.clima?1:0)+'&noticias='+(pa.noticias?1:0), {signal:c.signal});
+    clearTimeout(t);
+    if(!r.ok) return null;
+    const d = await r.json();
+    return (d.clima || d.noticias) ? d : null;
+  }catch(e){ return null; }
+}
+
+function contextoVivo(v){
+  let t = 'DATOS EN VIVO VERIFICADOS (consultados el ' + v.consultado + ', hora de Colombia). Úsalos para responder con precisión, menciona la fecha y la fuente, y no digas que no tienes acceso a información actual.\n';
+  if(v.clima){
+    const c=v.clima;
+    t += 'CLIMA EN CALI HOY (' + c.fuente + '): ' + c.estado + ', ' + c.temperatura + ' °C ahora (sensación ' + c.sensacion + ' °C), máxima ' + c.maxima + ' °C, mínima ' + c.minima + ' °C, probabilidad de lluvia ' + c.probLluvia + ' %, humedad ' + c.humedad + ' %, viento ' + c.viento + ' km/h, índice UV máximo ' + c.uv + '.\n';
+  }
+  if(v.noticias && v.noticias.length){
+    t += 'NOTICIAS DE CALI DE LAS ÚLTIMAS 24 HORAS (en orden de relevancia):\n';
+    v.noticias.forEach(function(n,i){ t += (i+1) + '. ' + n.titulo + (n.fuente ? ' (' + n.fuente + ')' : '') + '\n'; });
+  }
+  return t;
+}
+
+function vivoHtml(v){
+  if(!v) return '';
+  let h = '<div class="vivoCard"><div class="vivoTitulo">En vivo · Cali · ' + escapeHtml(v.consultado) + '</div>';
+  if(v.clima){
+    const c=v.clima;
+    h += '<p><strong>Clima:</strong> ' + escapeHtml(c.estado) + ', <strong>' + Math.round(c.temperatura) + ' °C</strong> (sensación ' + Math.round(c.sensacion) + ' °C). Hoy entre ' + Math.round(c.minima) + ' y ' + Math.round(c.maxima) + ' °C, ' + c.probLluvia + ' % de probabilidad de lluvia, UV ' + Math.round(c.uv) + '. <a href="' + c.fuenteUrl + '" target="_blank" rel="noopener">Fuente: ' + escapeHtml(c.fuente) + '</a></p>';
+  }
+  if(v.noticias && v.noticias.length){
+    h += '<p><strong>Noticias de hoy:</strong></p><ol>' + v.noticias.slice(0,5).map(function(n){
+      return '<li><a href="' + escapeHtml(n.url) + '" target="_blank" rel="noopener">' + escapeHtml(n.titulo) + '</a>' + (n.fuente ? ' <span class="vivoFuente">· ' + escapeHtml(n.fuente) + '</span>' : '') + '</li>';
+    }).join('') + '</ol>';
+  }
+  return h + '</div>';
+}
 let audienciaElegida = 'estudiante';
 let leccionServidor = null;
 const question = document.getElementById('question');
@@ -225,6 +274,24 @@ function formatAnswer(text){
   for(let i=0;i<lines.length;i++){
     let line = lines[i].trim();
     if(!line){ flushList(); continue; }
+    // Tablas markdown: | col | col |  (cuadros de actividades, horarios, comparaciones)
+    if(/^\|.*\|$/.test(line)){
+      flushList();
+      const filas=[];
+      while(i<lines.length && /^\|.*\|$/.test(lines[i].trim())){ filas.push(lines[i].trim()); i++; }
+      i--;
+      const celdas=function(f){ return f.slice(1,-1).split('|').map(function(c){return c.trim();}); };
+      const esSeparador=function(f){ return /^\|[\s:|-]+\|$/.test(f) && f.indexOf('-')>=0; };
+      const datos=filas.filter(function(f){ return !esSeparador(f); });
+      const conEncabezado = filas.length>1 && esSeparador(filas[1]);
+      let tabla='<div class="tablaWrap"><table class="tablaSabi">';
+      datos.forEach(function(f,k){
+        const tag=(k===0 && conEncabezado)?'th':'td';
+        tabla+='<tr>'+celdas(f).map(function(c){return '<'+tag+'>'+c+'</'+tag+'>';}).join('')+'</tr>';
+      });
+      html+=tabla+'</table></div>';
+      continue;
+    }
     if(/^#{1,4}\s+/.test(line)){ flushList(); html+='<h3>'+line.replace(/^#{1,4}\s+/,'')+'</h3>'; continue; }
     if(/^\d+\.\s+/.test(line) || /^[-•]\s+/.test(line)){ list.push(line.replace(/^\d+\.\s+/,'').replace(/^[-•]\s+/,'')); continue; }
     if(line.startsWith('<div class="mathBlock')){ flushList(); html += line; continue; }
@@ -458,28 +525,33 @@ async function askSabi(){
   showThinking();
   leccionServidor = null;
   let texto = '', revisada = false;
+  const pa = pideActualidad(q);
+  const vivo = (pa.clima || pa.noticias) ? await traerActualidad(pa) : null;
+  const pideCuadro = /\b(cuadro|tabla|cronograma|horario|planeador|planeacion|matriz|plan de actividades)\b/.test(norm(q));
+  const formatoCuadro = pideCuadro ? '\n\nFORMATO OBLIGATORIO: entrega el cuadro COMPLETO como tabla markdown (| columna | columna |, con fila de encabezado y fila separadora |---|), con TODAS las filas y columnas pedidas, sin resumir ni cortar. Después de la tabla, máximo 3 líneas de explicación.' : '';
+  const preguntaIA = (vivo ? contextoVivo(vivo) + '\nPREGUNTA: ' + q : q) + formatoCuadro;
   try{
     // 1. IA institucional: agente Maestro + Auditor del sello SABI
-    const d = await pedir(INSTITUCIONAL_URL, { pregunta:q, audiencia:audienciaElegida, grado:document.getElementById('grado').value, area:detectArea(q) }, 90000);
+    const d = await pedir(INSTITUCIONAL_URL, { pregunta:preguntaIA, audiencia:audienciaElegida, grado:document.getElementById('grado').value, area:detectArea(q) }, 90000);
     texto = d.answer; leccionServidor = d.leccion || null; revisada = !!(d.auditoria && d.auditoria.revisada);
   }catch(e1){
     try{
       // 2. Respaldo: sistema anterior
-      const d = await pedir(BACKEND_URL, { message:buildSabiPrompt(q), nombre:'Estudiante', grado:'' }, 60000);
+      const d = await pedir(BACKEND_URL, { message:(vivo ? contextoVivo(vivo) + '\n' : '') + buildSabiPrompt(q), nombre:'Estudiante', grado:'' }, 60000);
       texto = d.answer || d.respuesta || '';
     }catch(e2){ texto = ''; }
   }
   try{
     if(!texto) throw new Error('sin respuesta');
     const respuestaFinal = academicNotation(texto);
-    answer.innerHTML = '<div id="respuestaTexto">'+formatAnswer(respuestaFinal)+'</div>' + accionesHtml(q) + buildLesson(q, respuestaFinal)
+    answer.innerHTML = vivoHtml(vivo) + '<div id="respuestaTexto">'+formatAnswer(respuestaFinal)+'</div>' + accionesHtml(q) + buildLesson(q, respuestaFinal)
       + '<p class="sello">'+(revisada ? 'Respuesta revisada por el Auditor del sello SABI: pedagógica, científica y sin sesgo político. ' : '')+'SABI puede equivocarse: si algo no te convence, verifícalo con tu docente.</p>';
     renderMath();
     stateText.textContent = 'Microclase adaptativa activa';
   }catch(err){
     document.body.classList.add('offline');
     const r = offlineAcademicResponse(q);
-    answer.innerHTML = formatAnswer(r) + buildLesson(q, r);
+    answer.innerHTML = vivo ? vivoHtml(vivo) : (formatAnswer(r) + buildLesson(q, r));
     renderMath();
     stateText.textContent = 'Microclase offline';
   }finally{
