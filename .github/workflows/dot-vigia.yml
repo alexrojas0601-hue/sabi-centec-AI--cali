@@ -35,6 +35,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           titulo="Dot Vigía: AI CENTEC necesita atención"
-          numero=$(gh issue list --state open --search "$titulo in:title" --json number --jq '.[0].number')
+          numero=$(gh issue list --state open --search "\"$titulo\" in:title" --json number --jq '.[0].number')
           if [ -n "$numero" ]; then gh issue comment "$numero" --body-file data/vigia.md;
           else gh issue create --title "$titulo" --body-file data/vigia.md; fi

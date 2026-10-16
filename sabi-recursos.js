@@ -173,8 +173,9 @@
     var r = [], v = Math.ceil(min / step) * step; for (; v <= max + 1e-9; v += step) r.push(Math.round(v / step) * step); return r;
   }
   function fmt(v) { var a = Math.abs(v); return a >= 1e6 ? (v / 1e6).toFixed(1).replace('.0', '') + ' M' : a >= 1e4 ? Math.round(v).toLocaleString('es-CO') : (Math.round(v * 100) / 100).toLocaleString('es-CO'); }
+  var grafN = 0;
   function grafica(d) {
-    var k = caja('grafica', d.titulo), W = 640, H = 380, P = { l: 58, r: 18, t: 18, b: 44 };
+    var clipId = 'srclip' + (++grafN), k = caja('grafica', d.titulo), W = 640, H = 380, P = { l: 58, r: 18, t: 18, b: 44 };
     var series = [], x0, x1;
     (d.funciones || []).forEach(function (f, i) { try { series.push({ et: f.etiqueta || f.expr, f: compilar(f.expr), c: (/^#[0-9a-f]{3,8}$/i.test(f.color || '') ? f.color : SERIE[i % SERIE.length]) }); } catch (e) { series.push({ et: (f.etiqueta || f.expr) + ' (no se pudo graficar)', err: true, c: '#999' }); } });
     (d.series || []).forEach(function (s, i) { series.push({ et: s.etiqueta, datos: (s.datos || []).map(function (p) { return Array.isArray(p) ? [Number(p[0]), Number(p[1])] : [Number(p.x), Number(p.y)]; }), c: SERIE[(i + (d.funciones || []).length) % SERIE.length] }); });
@@ -198,7 +199,7 @@
     ticks(y0, y1, 7).forEach(function (v) { g += '<line x1="' + P.l + '" y1="' + Y(v) + '" x2="' + (W - P.r) + '" y2="' + Y(v) + '" stroke="#EEF2F8"/><text x="' + (P.l - 6) + '" y="' + (Y(v) + 4) + '" font-size="12" text-anchor="end" fill="#4B5A70">' + fmt(v) + '</text>'; });
     if (x0 < 0 && x1 > 0) g += '<line x1="' + X(0) + '" y1="' + P.t + '" x2="' + X(0) + '" y2="' + (H - P.b) + '" stroke="#1F1D1A" stroke-width="1.5"/>';
     if (y0 < 0 && y1 > 0) g += '<line x1="' + P.l + '" y1="' + Y(0) + '" x2="' + (W - P.r) + '" y2="' + Y(0) + '" stroke="#1F1D1A" stroke-width="1.5"/>';
-    g += '<defs><clipPath id="srclip"><rect x="' + P.l + '" y="' + P.t + '" width="' + (W - P.l - P.r) + '" height="' + (H - P.t - P.b) + '"/></clipPath></defs><g clip-path="url(#srclip)">';
+    g += '<defs><clipPath id="' + clipId + '"><rect x="' + P.l + '" y="' + P.t + '" width="' + (W - P.l - P.r) + '" height="' + (H - P.t - P.b) + '"/></clipPath></defs><g clip-path="url(#' + clipId + ')">';
     series.forEach(function (s) {
       var pts = s.pts || s.datos; if (!pts) return;
       var dpath = '', pen = false;
@@ -213,13 +214,13 @@
     g += '</svg>';
     var wrap = el('div', 'sr-graf', g + '<div class="sr-read"></div>'); k.body.appendChild(wrap);
     var svg = wrap.querySelector('svg'), read = wrap.querySelector('.sr-read'), cx = wrap.querySelector('.sr-cx');
-    svg.addEventListener('mousemove', function (e) {
+    svg.addEventListener('pointermove', function (e) {
       var r = svg.getBoundingClientRect(), px = (e.clientX - r.left) / r.width * W; if (px < P.l || px > W - P.r) { read.style.display = 'none'; cx.setAttribute('visibility', 'hidden'); return; }
       var x = x0 + (px - P.l) / (W - P.l - P.r) * (x1 - x0);
       var txt = 'x = ' + fmt(x) + series.filter(function (s) { return s.f; }).map(function (s) { var y = s.f(x); return ' · ' + s.et + ' = ' + (isFinite(y) ? fmt(y) : '—'); }).join('');
       read.textContent = txt; read.style.display = 'block'; cx.setAttribute('x1', px); cx.setAttribute('x2', px); cx.setAttribute('visibility', 'visible');
     });
-    svg.addEventListener('mouseleave', function () { read.style.display = 'none'; cx.setAttribute('visibility', 'hidden'); });
+    svg.addEventListener('pointerleave', function () { read.style.display = 'none'; cx.setAttribute('visibility', 'hidden'); });
     k.body.appendChild(el('div', 'sr-leg', series.map(function (s) { return '<span><i style="background:' + s.c + '"></i>' + esc(s.et) + '</span>'; }).join('')));
     k.body.appendChild(el('p', 'sr-note', 'Pasa el cursor (o el dedo) sobre la gráfica para leer los valores. Ubica dónde corta los ejes, dónde crece o decrece y qué significa en el problema.'));
     k.body.appendChild(descargarSVG(svg, d.titulo));
@@ -500,7 +501,7 @@
     if (mermaidListo) return mermaidListo;
     mermaidListo = new Promise(function (ok, no) {
       if (window.mermaid) return ok(window.mermaid);
-      var s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js'; s.async = true;
+      var s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js'; s.async = true;
       s.onload = function () { window.mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'base', themeVariables: { primaryColor: '#EEF5FF', primaryBorderColor: '#064FAE', primaryTextColor: '#073B7A', lineColor: '#064FAE', secondaryColor: '#FFF7EF', tertiaryColor: '#F5F8FD', fontFamily: 'Public Sans, system-ui, sans-serif', fontSize: '16px' } }); ok(window.mermaid); };
       s.onerror = no; document.head.appendChild(s);
     });

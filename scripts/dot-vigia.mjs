@@ -71,9 +71,10 @@ async function servicios() {
   await red("Portada sabicentec.com", "https://sabicentec.com/", (t) => (String(t).includes("sabi-recursos.js") ? true : "la portada publicada no carga sabi-recursos.js"));
 }
 
-await sintaxis();
-await funcionales();
-if (!process.env.VIGIA_SIN_RED) await servicios();
+for (const [nombre, paso] of [["sintaxis", sintaxis], ["funcionales", funcionales], ["servicios", process.env.VIGIA_SIN_RED ? null : servicios]]) {
+  if (!paso) continue;
+  try { await paso(); } catch (e) { falla(`etapa ${nombre}`, e.message); }
+}
 
 const fallas = resultados.filter((r) => !r.ok);
 const informe = { fecha: new Date().toISOString(), total: resultados.length, fallas: fallas.length, resultados };

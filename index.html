@@ -259,6 +259,7 @@ function vivoHtml(v){
 }
 let audienciaElegida = 'estudiante';
 let dotActual = null, comandoActual = null, comandoElegido = null;
+function dotInfo(){ return (dotActual && window.SabiDots && SabiDots.DOTS[dotActual]) || null; }
 let leccionServidor = null;
 const question = document.getElementById('question');
 const askBtn = document.getElementById('askBtn');
@@ -374,7 +375,6 @@ function formatAnswer(text){
     if(line.startsWith('<div class="mathBlock')){ flushList(); html += line; continue; }
     const rec = line.match(/^\[\[SABIRECURSO:(\d+)\]\]$/);
     if(rec){ flushList(); html += '<div data-sabirecurso="'+rec[1]+'"></div>'; continue; }
-    if(line.startsWith('&lt;div class=&quot;mathBlock')){ flushList(); html += line.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"'); continue; }
     // Si la línea parece una fórmula, sepárala visualmente.
     const plain=line.replace(/<[^>]+>/g,'');
     if(/[=√²³⁴⁵⁶⁷⁸⁹ⁿπΣΔ≤≥×÷±]/.test(plain) && plain.length<180 && !/[.!?]$/.test(plain)){
@@ -504,7 +504,7 @@ function buildLesson(q, ans){
   }
   return '<section class="microLesson">'+
     '<div class="microIntro"><strong>SABI convierte la respuesta en aprendizaje:</strong> comprende, practica, aplica y demuestra.</div>'+advert+
-    '<div class="microMeta"><span>'+labels[audience]+'</span>'+(dotActual && window.SabiDots ? '<span class="dotPill" style="--dot:'+SabiDots.DOTS[dotActual].color+'">Dot '+escapeHtml(SabiDots.DOTS[dotActual].nombre)+'</span>' : '<span>'+areaLabels[area]+'</span>')+'</div>'+
+    '<div class="microMeta"><span>'+labels[audience]+'</span>'+(dotInfo() ? '<span class="dotPill" style="--dot:'+dotInfo().color+'">Dot '+escapeHtml(dotInfo().nombre)+'</span>' : '<span>'+areaLabels[area]+'</span>')+'</div>'+
     '<div class="microGrid">'+
       '<div class="microCard visual"><h3>Observa la idea</h3>'+svg(type)+'<p>'+escapeHtml(d.observa)+'</p></div>'+
       '<div class="microCard hacer"><h3>Construye y comprueba</h3><p><strong>Objetivo:</strong> '+escapeHtml(d.objetivo)+'</p><ol>'+d.construye.map(function(x){return '<li>'+escapeHtml(x)+'</li>';}).join('')+'</ol></div>'+ 
@@ -616,8 +616,8 @@ async function askSabi(){
   const preguntaIA = (contexto ? contexto + '\nPREGUNTA: ' + q : q) + formatoCuadro;
   try{
     // 1. IA institucional: agente Maestro + Auditor del sello SABI
-    const d = await pedir(INSTITUCIONAL_URL, { pregunta:preguntaIA, audiencia:audienciaElegida, grado:document.getElementById('grado').value, area:(dotActual && window.SabiDots ? SabiDots.DOTS[dotActual].area : detectArea(q)), dot:dotActual||'', comando:comandoActual||'' }, 150000);
-    texto = d.answer; leccionServidor = d.leccion || null; revisada = !!(d.auditoria && d.auditoria.revisada); auditoria = d.auditoria || null; if(d.dot) dotActual = d.dot;
+    const d = await pedir(INSTITUCIONAL_URL, { pregunta:q + formatoCuadro, contexto:contexto, audiencia:audienciaElegida, grado:document.getElementById('grado').value, area:(dotInfo() ? dotInfo().area : detectArea(q)), dot:dotActual||'', comando:comandoActual||'' }, 150000);
+    texto = d.answer; leccionServidor = d.leccion || null; revisada = !!(d.auditoria && d.auditoria.revisada); auditoria = d.auditoria || null; if(d.dot && window.SabiDots && SabiDots.DOTS[d.dot]) dotActual = d.dot;
   }catch(e1){
     try{
       // 2. Respaldo: sistema anterior
@@ -627,7 +627,7 @@ async function askSabi(){
   }
   try{
     if(!texto) throw new Error('sin respuesta');
-    const ext = window.SabiRecursos ? SabiRecursos.extraer(texto) : { texto:texto, recursos:[] };
+    const ext = window.SabiRecursos ? SabiRecursos.extraer(texto) : { texto:String(texto).replace(/```(sabi|mermaid)[\s\S]*?```/gi,''), recursos:[] };
     let textoBase = ext.texto;
     // Modo investigador garantizado: si la IA no trajo el bloque de fuentes, SABI arma la ruta de búsqueda.
     if(comandoActual==='investigar' && !ext.recursos.some(function(r){return r.data && r.data.tipo==='fuentes';})){
@@ -730,8 +730,8 @@ document.querySelectorAll('.quien button').forEach(function(b){
 // ---------- Sello del Dot Auditor ----------
 function selloHtml(revisada, a){
   if(!revisada) return '';
-  const dot = dotActual && window.SabiDots ? ' Tutor: Dot '+SabiDots.DOTS[dotActual].nombre+'.' : '';
-  const corr = a && a.aprobado===false ? ' El auditor encontró detalles y los corrigió antes de publicarla.' : '';
+  const dot = dotInfo() ? ' Tutor: Dot '+dotInfo().nombre+'.' : '';
+  const corr = a && a.corregida ? ' El auditor encontró detalles y los corrigió antes de publicarla.' : '';
   return 'Respuesta revisada por el Dot Auditor Riguroso del sello SABI: pedagógica, científica y sin sesgo político.'+corr+dot+' ';
 }
 function palabrasClave(q){
@@ -815,7 +815,7 @@ pintarRepasos();
 // ---------- Radar del futuro (Dot Investigador SextoSentido) ----------
 (function(){
   fetch(SUPERACION+'/data/tendencias.json',{cache:'no-cache'}).then(function(r){return r.json();}).then(function(d){
-    const t=(d.tendencias||[]).filter(function(x){return x.estado==='activo';}).slice(-4).reverse(); if(!t.length) return;
+    const t=(d.tendencias||[]).filter(function(x){return x.estado==='activo' && /^https:\/\//.test(x.url||'');}).slice(-4).reverse(); if(!t.length) return;
     document.getElementById('radarGrid').innerHTML=t.map(function(x,i){
       return '<article class="radar"><small>'+escapeHtml(x.area)+' · horizonte '+escapeHtml(x.horizonte)+'</small><strong>'+escapeHtml(x.titulo)+'</strong><p>'+escapeHtml(x.hallazgo)+'</p><p><b>Para CENTEC:</b> '+escapeHtml(x.oportunidad_centec)+'</p><a href="'+escapeHtml(x.url)+'" target="_blank" rel="noopener">Fuente: '+escapeHtml(x.fuente)+' ('+escapeHtml(x.fecha_fuente)+')</a>'+(x.pregunta_para_sabi?'<button type="button" data-p="'+escapeHtml(x.pregunta_para_sabi)+'">Pregúntale a SABI</button>':'')+'</article>';
     }).join('');

@@ -35,7 +35,7 @@
     var n = ' ' + sinTildes(texto).replace(/[^a-z0-9ñ ]/g, ' ').replace(/\s+/g, ' ') + ' ';
     var mejor = null, puntos = 0;
     Object.keys(CLAVES).forEach(function (dot) {
-      var p = CLAVES[dot].reduce(function (s, k) { return s + (n.indexOf(' ' + k) >= 0 ? k.split(' ').length : 0); }, 0);
+      var p = CLAVES[dot].reduce(function (s, k) { return s + (n.indexOf(' ' + k + (k.length <= 4 ? ' ' : '')) >= 0 ? k.split(' ').length : 0); }, 0);
       if (p > puntos) { mejor = dot; puntos = p; }
     });
     return mejor;
