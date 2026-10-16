@@ -1,0 +1,40 @@
+# AI CENTEC · Dot Vigía: auditor técnico permanente de sabicentec.com
+# Corre cada día, con cada cambio y a mano. Si algo falla, abre (o actualiza) un Issue.
+name: AI CENTEC · Dot Vigía
+
+on:
+  schedule:
+    - cron: "15 11 * * *"   # todos los días 6:15 a. m. hora Colombia
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  vigilar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Revisar código, recursos y servicios en vivo
+        id: vigia
+        # En cada cambio solo se revisa el código; la revisión diaria también prueba los servicios publicados.
+        env:
+          VIGIA_SIN_RED: ${{ (github.event_name == 'push' || github.event_name == 'pull_request') && '1' || '' }}
+        run: node scripts/dot-vigia.mjs
+      - name: Avisar al equipo si algo falló
+        if: failure() && github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          titulo="Dot Vigía: AI CENTEC necesita atención"
+          numero=$(gh issue list --state open --search "$titulo in:title" --json number --jq '.[0].number')
+          if [ -n "$numero" ]; then gh issue comment "$numero" --body-file data/vigia.md;
+          else gh issue create --title "$titulo" --body-file data/vigia.md; fi

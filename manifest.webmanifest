@@ -1,0 +1,20 @@
+{
+  "name": "AI CENTEC · SABI",
+  "short_name": "AI CENTEC",
+  "description": "La IA del Colegio CENTEC para investigar, aprender y practicar con tutores por área y respuestas verificadas.",
+  "lang": "es-CO",
+  "start_url": "/?origen=app",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F7F5EF",
+  "theme_color": "#073B7A",
+  "icons": [
+    { "src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "Investigar", "url": "/?cmd=investigar", "description": "Guía de investigación con fuentes confiables" },
+    { "name": "Flashcards", "url": "/?cmd=flashcards", "description": "Tarjetas de repaso con repetición espaciada" },
+    { "name": "Paso a paso", "url": "/?cmd=paso_a_paso", "description": "Matemáticas y finanzas sin saltarse pasos" }
+  ]
+}
