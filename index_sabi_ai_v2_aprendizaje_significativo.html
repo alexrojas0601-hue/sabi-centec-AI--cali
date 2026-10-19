@@ -79,5 +79,6 @@ window.addEventListener('online',()=>estado.textContent='Listo para aprender');
 window.addEventListener('offline',()=>estado.textContent='Modo offline');
 try{if('serviceWorker' in navigator){const sw="self.addEventListener('install',e=>{e.waitUntil(caches.open('sabi-ai-v2').then(c=>c.addAll(['./'])));self.skipWaiting();});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).catch(()=>caches.match(e.request).then(r=>r||caches.match('./'))));});";const blob=new Blob([sw],{type:'text/javascript'});navigator.serviceWorker.register(URL.createObjectURL(blob));}}catch(e){}
 </script>
+<script src="https://superacion.sabicentec.com/sabi-puerta.js" data-rol="estudiante" data-texto="Aprender con SABI" defer></script>
 </body>
 </html>
