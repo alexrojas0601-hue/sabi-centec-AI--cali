@@ -1,8 +1,8 @@
 // AI CENTEC · service worker: app instalable y apertura rápida.
 // La página siempre se pide primero a la red (para tener la versión más nueva); si no hay internet,
 // se muestra la última copia guardada. Las respuestas de la IA y los datos en vivo nunca se guardan.
-const CACHE = 'ai-centec-v4.1';
-const BASE = ['/', '/sabi-dots.js', '/sabi-recursos.js', '/manifest.webmanifest', '/assets/icon-192.png', '/assets/icon-512.png'];
+const CACHE = 'ai-centec-v5';
+const BASE = ['/', '/sabi-dots.js', '/sabi-recursos.js', '/sabi-juegos.js', '/sabi-fichas.js', '/fichas.html', '/experimentos.html', '/manifest.webmanifest', '/assets/icon-192.png', '/assets/icon-512.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => Promise.all(BASE.map((u) => c.add(u).catch(() => null)))).then(() => self.skipWaiting()));

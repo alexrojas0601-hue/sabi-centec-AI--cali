@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fichas de matemáticas · AI CENTEC</title>
+<meta name="description" content="Fichas de matemáticas infinitas de Transición a 11°: cálculo a medida, problemas cotidianos de Cali, series y patrones, geometría visual, dinero y cambio y encuentra el error. Se resuelven en pantalla o se imprimen con clave de respuestas.">
+<meta name="theme-color" content="#073B7A">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Public+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#073B7A;--azul:#064FAE;--naranja:#FF8A00;--borde:#D8E5F8;--fondo:#F7F5EF;--texto:#1F1D1A}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fondo);color:var(--texto);font-family:'Public Sans',system-ui,sans-serif}
+  .top{background:linear-gradient(90deg,var(--navy),var(--azul));color:#fff;padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .top a.marca{color:#fff;text-decoration:none;font-weight:900;font-size:24px;letter-spacing:.5px}.top a.marca span{color:#FFD43B}
+  nav{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:center;background:#fff;border-bottom:1px solid var(--borde);padding:9px 14px}
+  nav a{color:var(--navy);font-weight:800;text-decoration:none;font-size:15px;padding:4px 2px;border-bottom:3px solid transparent}nav a[aria-current]{border-bottom-color:var(--naranja)}nav a:hover{color:var(--naranja)}
+  main{max-width:1000px;margin:0 auto;padding:20px clamp(14px,3vw,32px) 48px}
+  h1{color:var(--navy);margin:0 0 6px;font-size:clamp(26px,3vw,36px)}
+  .intro{color:#4B5A70;font-size:clamp(16px,1.2vw,18px);margin:0 0 16px;max-width:75ch;line-height:1.55}
+  .panel{background:#fff;border:1px solid var(--borde);border-radius:18px;padding:16px;display:grid;gap:14px;margin-bottom:20px}
+  .fila{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .fila > b{color:var(--navy);min-width:90px}
+  select{border:1.5px solid #9FBCE6;border-radius:999px;padding:10px 16px;font-size:16px;font-family:inherit;color:var(--navy);background:#fff}
+  .tipos{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;width:100%}
+  .tipo{border:1.5px solid #9FBCE6;background:#fff;color:var(--navy);border-radius:14px;padding:10px 12px;text-align:left;cursor:pointer;font-family:inherit}
+  .tipo strong{display:block;font-size:15.5px}.tipo small{color:#4B5A70;font-size:13px;line-height:1.35}
+  .tipo[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}.tipo[aria-pressed=true] small{color:#DDE8F8}
+  .btn{border:0;border-radius:999px;background:var(--naranja);color:#fff;font-weight:800;padding:11px 18px;font-size:15.5px;cursor:pointer;font-family:inherit;text-decoration:none;display:inline-block}
+  .btn.alt{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+  .nota{color:#4B5A70;font-size:14px;margin:0}
+  @media print{.top,nav,.panel,h1,.intro,.nota{display:none!important}body{background:#fff}main{padding:0;max-width:none}}
+</style>
+</head>
+<body>
+<header class="top"><a class="marca" href="/">AI <span>CENTEC</span></a><span style="opacity:.9;font-weight:700">Fichas de matemáticas</span></header>
+<nav aria-label="Secciones de AI CENTEC"><a href="/">Preguntar a SABI</a><a href="/experimentos.html">Laboratorio de experimentos</a><a href="/fichas.html" aria-current="page">Fichas de matemáticas</a><a href="/?cmd=lectura">Lectura comprensiva</a></nav>
+<main>
+  <h1>Fichas de matemáticas</h1>
+  <p class="intro">Una buena ficha empieza con una buena idea: cada ficha abre con la idea clave y un ejemplo resuelto, y luego propone ejercicios a la medida del grado. Son infinitas (cada clic crea una nueva), se resuelven en pantalla con revisión inmediata o se imprimen con la clave de respuestas.</p>
+  <section class="panel" aria-label="Elige tu ficha">
+    <div class="fila"><b>Grado</b><select id="grado" aria-label="Grado"></select>
+      <b style="min-width:auto;margin-left:8px">Ejercicios</b><select id="cantidad" aria-label="Cantidad de ejercicios"><option>6</option><option selected>10</option><option>16</option><option>20</option></select></div>
+    <div class="fila"><b>Tipo</b><div class="tipos" id="tipos" role="group" aria-label="Tipo de ficha"></div></div>
+    <div class="fila"><button class="btn" id="crear" type="button">Crear ficha nueva</button>
+      <a class="btn alt" id="conSabi" href="/?cmd=worksheet">Ficha a medida con SABI (IA)</a></div>
+    <p class="nota">Comparte o vuelve a abrir la misma ficha con su número: el enlace de esta página la guarda.</p>
+  </section>
+  <div id="ficha" aria-live="polite"><p class="nota">Cargando el generador…</p></div>
+</main>
+<script src="/sabi-fichas.js"></script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  if(!window.SabiFichas){ $('ficha').innerHTML='<p class="nota">No se pudo cargar el generador de fichas. Revisa tu conexión y recarga la página.</p>'; return; }
+  var F=window.SabiFichas, p=new URLSearchParams(location.search);
+  var est={ grado: Math.max(0,Math.min(11,parseInt(p.get('g'),10))), tipo: p.get('t')||'calculo', cantidad: parseInt(p.get('n'),10)||10, semilla: parseInt(p.get('s'),10)||0 };
+  if(!isFinite(est.grado)){ est.grado=3; try{ var gg=parseInt(localStorage.getItem('sabi_fichas_grado'),10); if(isFinite(gg)) est.grado=gg; }catch(e){} }
+  if(!F.TIPOS.some(function(t){return t.id===est.tipo;})) est.tipo='calculo';
+  $('grado').innerHTML=F.GRADOS.map(function(g){return '<option value="'+g.n+'"'+(g.n===est.grado?' selected':'')+'>'+g.nombre+'</option>';}).join('');
+  $('cantidad').value=String([6,10,16,20].indexOf(est.cantidad)>=0?est.cantidad:10);
+  $('tipos').innerHTML=F.TIPOS.map(function(t){return '<button class="tipo" type="button" data-t="'+t.id+'" aria-pressed="'+(t.id===est.tipo)+'"><strong>'+t.nombre+'</strong><small>'+t.desc+'</small></button>';}).join('');
+  function enlaceSabi(){
+    var g=F.GRADOS[est.grado].nombre, t=F.TIPOS.filter(function(x){return x.id===est.tipo;})[0].nombre.toLowerCase();
+    $('conSabi').href='/?cmd=worksheet&q='+encodeURIComponent('Ficha de '+t+' para '+g+' sobre el tema que estamos viendo: ');
+  }
+  function crear(nueva){
+    est.grado=parseInt($('grado').value,10); est.cantidad=parseInt($('cantidad').value,10);
+    if(nueva) est.semilla=0;
+    try{ localStorage.setItem('sabi_fichas_grado', est.grado); }catch(e){}
+    $('ficha').innerHTML='';
+    F.montar($('ficha'), est); enlaceSabi();
+  }
+  $('ficha').addEventListener('sabifichas:montada', function(e){
+    var d=e.detail||{}; est.semilla=d.semilla; est.grado=d.grado; est.tipo=d.tipo; est.cantidad=d.cantidad;
+    var q=new URLSearchParams(); q.set('g',d.grado); q.set('t',d.tipo); q.set('n',d.cantidad); q.set('s',d.semilla);
+    history.replaceState(null,'','?'+q.toString());
+  });
+  $('tipos').onclick=function(ev){ var b=ev.target.closest('.tipo'); if(!b) return; est.tipo=b.dataset.t; this.querySelectorAll('.tipo').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));}); crear(true); };
+  $('grado').onchange=function(){ crear(true); };
+  $('cantidad').onchange=function(){ crear(true); };
+  $('crear').onclick=function(){ crear(true); };
+  crear(!est.semilla);
+})();
+</script>
+</body>
+</html>

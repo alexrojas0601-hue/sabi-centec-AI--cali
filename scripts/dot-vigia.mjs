@@ -18,11 +18,13 @@ const falla = (nombre, detalle) => resultados.push({ nombre, ok: false, detalle:
 
 // 1. Sintaxis
 async function sintaxis() {
-  const html = await readFile("index.html", "utf8");
-  [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].forEach((m, i) => {
-    try { new vm.Script(m[1]); ok(`index.html · script ${i + 1}`); } catch (e) { falla(`index.html · script ${i + 1}`, e.message); }
-  });
-  for (const f of ["sabi-dots.js", "sabi-recursos.js", "sabi-vivo.js", "sw.js"]) {
+  for (const pagina of ["index.html", "experimentos.html", "fichas.html"]) {
+    const html = await readFile(pagina, "utf8");
+    [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].forEach((m, i) => {
+      try { new vm.Script(m[1]); ok(`${pagina} · script ${i + 1}`); } catch (e) { falla(`${pagina} · script ${i + 1}`, e.message); }
+    });
+  }
+  for (const f of ["sabi-dots.js", "sabi-recursos.js", "sabi-juegos.js", "sabi-fichas.js", "sabi-vivo.js", "sw.js"]) {
     try { new vm.Script(await readFile(f, "utf8")); ok(f); } catch (e) { falla(f, e.message); }
   }
   try { JSON.parse(await readFile("manifest.webmanifest", "utf8")); ok("manifest.webmanifest"); } catch (e) { falla("manifest.webmanifest", e.message); }
@@ -46,6 +48,17 @@ async function funcionales() {
   const ex = R.extraer('Hola\n```sabi\n{"tipo":"quiz","preguntas":[]}\n```\n```mermaid\nflowchart TD\nA-->B\n```');
   ex.recursos.length === 2 ? ok("extracción de bloques") : falla("extracción de bloques", JSON.stringify(ex.recursos));
   const rutas = [["¿Qué es el interés compuesto?", "Dot_Matematicas_Estrategica"], ["Explain the present perfect", "Dot_Bilinguismo_Ingles"], ["Me siento ansioso antes del examen", "Dot_InteligenciaEmocional_Valores"], ["¿Cómo funciona un robot?", "Dot_EducacionDigital_IA"], ["La fotosíntesis", "Dot_CienciasNaturales_STEAM"], ["Causas de la independencia de Colombia", "Dot_CienciasSociales_Ciudadanas"]];
+  // Fichas de matemáticas: cada ejercicio generado debe aceptar su propia respuesta (12 grados × 6 tipos × 8 semillas)
+  const cf = { window: {}, console }; vm.createContext(cf); vm.runInContext(await readFile("sabi-fichas.js", "utf8"), cf);
+  const SF = cf.window.SabiFichas; let items = 0, malas = [];
+  for (let g = 0; g <= 11; g++) for (const t of SF.TIPOS.map((x) => x.id)) for (let s = 1; s <= 8; s++) {
+    for (const it of SF.generar({ grado: g, tipo: t, cantidad: 20, semilla: s }).items) {
+      items++;
+      const v = it.modo === "error" ? { veredicto: it.veredicto, texto: it.respuesta } : it.respuesta;
+      if (/NaN|undefined|Infinity/.test(it.enunciado + it.respuesta) || !SF.revisar(it, v)) malas.push(`${g}/${t}/${s}: ${it.respuesta}`);
+    }
+  }
+  malas.length ? falla("fichas · respuestas", `${malas.length} de ${items}: ${malas.slice(0, 3).join(" · ")}`) : ok("fichas · respuestas", `${items} ejercicios correctos`);
   for (const [q, dot] of rutas) { const r = D.elegirDot(q); r === dot ? ok(`Dot · ${q}`) : falla(`Dot · ${q}`, `eligió ${r}, esperado ${dot}`); }
 }
 
@@ -68,6 +81,8 @@ async function servicios() {
   await red("¿Cómo funciona?", "https://ai.sabicentec.com/api/comofunciona?q=nevera", (d) => (d.ok ? true : d.error));
   await red("Radar del futuro", "https://superacion.sabicentec.com/data/tendencias.json", (d) => ((d.tendencias || []).length ? true : "vacío"));
   await red("Retos de la semana", "https://superacion.sabicentec.com/data/recursos.json", (d) => ((d.recursos || []).length ? true : "vacío"));
+  for (let g = 0; g <= 11; g++) await red(`Laboratorio · grado ${g === 0 ? "Transición" : g + "°"}`, `https://superacion.sabicentec.com/data/experimentos/grado-${String(g).padStart(2, "0")}.json`, (d) => (Array.isArray(d) && d.length >= 50 ? true : `solo ${Array.isArray(d) ? d.length : 0} experimentos`));
+  await red("Página de fichas", "https://sabicentec.com/fichas.html", (t) => (String(t).includes("sabi-fichas.js") ? true : "fichas.html no publicada"));
   await red("Portada sabicentec.com", "https://sabicentec.com/", (t) => (String(t).includes("sabi-recursos.js") ? true : "la portada publicada no carga sabi-recursos.js"));
 }
 

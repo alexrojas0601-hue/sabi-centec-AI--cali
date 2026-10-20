@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratorio de experimentos · AI CENTEC</title>
+<meta name="description" content="600 experimentos seguros (50 por grado) con materiales caseros, de Transición a 11°, alineados a los DBA de Ciencias Naturales del MEN, con el método predice, observa y explica.">
+<meta name="theme-color" content="#073B7A">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Public+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#073B7A;--azul:#064FAE;--naranja:#FF8A00;--oro:#F5C518;--verde:#108A4F;--borde:#D8E5F8;--fondo:#F7F5EF;--texto:#1F1D1A}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fondo);color:var(--texto);font-family:'Public Sans',system-ui,sans-serif}
+  .top{background:linear-gradient(90deg,var(--navy),var(--azul));color:#fff;padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .top a.marca{color:#fff;text-decoration:none;font-weight:900;font-size:24px;letter-spacing:.5px}.top a.marca span{color:#FFD43B}
+  nav{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:center;background:#fff;border-bottom:1px solid var(--borde);padding:9px 14px}
+  nav a{color:var(--navy);font-weight:800;text-decoration:none;font-size:15px;padding:4px 2px;border-bottom:3px solid transparent}nav a[aria-current]{border-bottom-color:var(--naranja)}nav a:hover{color:var(--naranja)}
+  main{max-width:1180px;margin:0 auto;padding:20px clamp(14px,3vw,32px) 48px}
+  h1{color:var(--navy);margin:0 0 6px;font-size:clamp(26px,3vw,36px)}
+  .intro{color:#4B5A70;font-size:clamp(16px,1.2vw,18px);margin:0 0 16px;max-width:75ch;line-height:1.55}
+  .poe{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}.poe span{background:#fff;border:1px solid var(--borde);border-radius:999px;padding:7px 12px;font-weight:800;color:var(--navy);font-size:14px}.poe b{color:var(--naranja)}
+  .filtros{background:#fff;border:1px solid var(--borde);border-radius:18px;padding:14px;display:grid;gap:12px;margin-bottom:18px}
+  .fila{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  select,input[type=search]{border:1.5px solid #9FBCE6;border-radius:999px;padding:10px 16px;font-size:16px;font-family:inherit;color:var(--navy);background:#fff}
+  input[type=search]{flex:1;min-width:200px}
+  .chip{border:1.5px solid #9FBCE6;background:#fff;color:var(--navy);border-radius:999px;padding:8px 14px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit}
+  .chip[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}
+  .btn{border:0;border-radius:999px;background:var(--naranja);color:#fff;font-weight:800;padding:10px 16px;font-size:15px;cursor:pointer;font-family:inherit;text-decoration:none;display:inline-block}
+  .btn.alt{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+  label.sol{display:inline-flex;gap:6px;align-items:center;font-weight:700;color:var(--navy)}
+  .cuenta{color:#4B5A70;font-weight:700;margin:0 0 10px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+  .card{background:#fff;border:1px solid var(--borde);border-top:6px solid var(--azul);border-radius:14px;padding:14px;cursor:pointer;text-align:left;font-family:inherit;color:var(--texto);display:flex;flex-direction:column;gap:6px}
+  .card:hover,.card:focus{border-color:var(--naranja);outline:none;box-shadow:0 6px 18px rgba(7,59,122,.1)}
+  .card strong{font-family:Literata,Georgia,serif;font-size:18px;color:var(--navy);line-height:1.3}
+  .card small{color:#4B5A70;font-size:14px;line-height:1.45}
+  .card .tags{display:flex;flex-wrap:wrap;gap:5px}.card .tags span{font-size:12px;font-weight:800;border-radius:999px;padding:3px 8px;background:#EEF5FF;color:var(--navy)}.card .tags .r{background:#FFF1E0;color:#9A4A00}
+  .e-materia_cambios{border-top-color:#064FAE}.e-fuerza_movimiento{border-top-color:#FF8A00}.e-luz_sonido_energia{border-top-color:#C9A100}.e-seres_vivos_cuerpo{border-top-color:#108A4F}.e-tierra_universo{border-top-color:#7A5AC8}.e-quimica{border-top-color:#7A5AC8}
+  #detalle{scroll-margin-top:12px}
+  .vacío{color:#4B5A70}
+  @media(max-width:640px){.top a.marca{font-size:20px}}
+</style>
+</head>
+<body>
+<header class="top"><a class="marca" href="/">AI <span>CENTEC</span></a><span style="opacity:.9;font-weight:700">Laboratorio de experimentos</span></header>
+<nav aria-label="Secciones de AI CENTEC"><a href="/">Preguntar a SABI</a><a href="/experimentos.html" aria-current="page">Laboratorio de experimentos</a><a href="/fichas.html">Fichas de matemáticas</a><a href="/?cmd=lectura">Lectura comprensiva</a></nav>
+<main>
+  <h1>Laboratorio CENTEC</h1>
+  <p class="intro">La ciencia se aprende haciendo. Cada grado tiene al menos 50 experimentos seguros con materiales de la casa, la tienda o la papelería, alineados a los Derechos Básicos de Aprendizaje de Ciencias Naturales del MEN. Todos siguen el mismo camino:</p>
+  <div class="poe"><span><b>1</b> Predice antes de hacer</span><span><b>2</b> Hazlo y observa</span><span><b>3</b> Explica y compara</span><span><b>4</b> Cambia una variable</span></div>
+  <section class="filtros" aria-label="Filtros">
+    <div class="fila">
+      <select id="grado" aria-label="Grado"></select>
+      <input type="search" id="buscar" placeholder="Buscar: sombra, imán, semillas, vinagre…" aria-label="Buscar experimento">
+      <button class="btn alt" id="azar" type="button">Experimento al azar</button>
+    </div>
+    <div class="fila" id="ejes" role="group" aria-label="Eje temático"></div>
+    <div class="fila"><label class="sol"><input type="checkbox" id="soloBajo"> Solo los que pueden hacer sin acompañamiento especial</label>
+      <a class="btn" href="/?cmd=experimento">Crear uno nuevo con SABI</a></div>
+  </section>
+  <div id="detalle"></div>
+  <p class="cuenta" id="cuenta">Cargando experimentos…</p>
+  <div class="grid" id="grid"></div>
+</main>
+<script src="/sabi-recursos.js"></script>
+<script src="/sabi-juegos.js"></script>
+<script>
+(function(){
+  var NOMBRES=['Transición','1°','2°','3°','4°','5°','6°','7°','8°','9°','10°','11°'];
+  var EJES=SabiJuegos.EJES;
+  var $=function(id){return document.getElementById(id);};
+  var esc=function(t){return String(t==null?'':t).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];});};
+  var norm=function(t){return String(t||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');};
+  var p=new URLSearchParams(location.search), g=Math.max(0,Math.min(11,parseInt(p.get('g'),10)||0)), eje=p.get('eje')||'', datos=[], cache={};
+  try{ if(!p.get('g')){ var guard=parseInt(localStorage.getItem('sabi_lab_grado'),10); if(isFinite(guard)) g=guard; } }catch(e){}
+  $('grado').innerHTML=NOMBRES.map(function(n,i){return '<option value="'+i+'"'+(i===g?' selected':'')+'>'+n+'</option>';}).join('');
+  $('ejes').innerHTML='<button class="chip" type="button" data-e="" aria-pressed="'+(!eje)+'">Todos</button>'+Object.keys(EJES).map(function(k){return '<button class="chip" type="button" data-e="'+k+'" aria-pressed="'+(eje===k)+'">'+EJES[k]+'</button>';}).join('');
+  function url(){ var q=new URLSearchParams(); q.set('g',g); if(eje) q.set('eje',eje); history.replaceState(null,'','?'+q.toString()+location.hash); }
+  function filtrados(){
+    var b=norm($('buscar').value), solo=$('soloBajo').checked;
+    return datos.filter(function(e){ return (!eje||e.eje===eje) && (!solo||e.riesgo==='bajo') && (!b||norm(e.titulo+' '+e.pregunta+' '+(e.materiales||[]).join(' ')+' '+(e.vocabulario||[]).join(' ')).indexOf(b)>=0); });
+  }
+  function pintar(){
+    var l=filtrados();
+    $('cuenta').textContent=l.length+' de '+datos.length+' experimentos de '+NOMBRES[g]+(eje?' · '+EJES[eje]:'');
+    $('grid').innerHTML=l.map(function(e){ return '<button class="card e-'+esc(e.eje)+'" type="button" data-id="'+esc(e.id)+'"><div class="tags"><span>'+esc(EJES[e.eje]||'')+'</span>'+(e.duracion_min?'<span>'+esc(e.duracion_min)+' min</span>':'')+(e.riesgo==='con_adulto'?'<span class="r">Con adulto</span>':'')+'</div><strong>'+esc(e.titulo)+'</strong><small>'+esc(e.pregunta)+'</small></button>'; }).join('') || '<p class="vacío">No hay experimentos con ese filtro.</p>';
+  }
+  function abrir(id){
+    var e=datos.find(function(x){return x.id===id;}); if(!e) return;
+    var d=$('detalle'); d.innerHTML='';
+    var nodo=SabiJuegos.experimento(e); d.appendChild(nodo);
+    var acc=document.createElement('p'); acc.innerHTML='<a class="btn alt" href="/?cmd=eli5&q='+encodeURIComponent('Explícame con más detalle por qué pasa esto en el experimento «'+e.titulo+'»: '+e.explicacion)+'">Pregúntale a SABI por qué pasa</a> <button class="btn alt" type="button" id="cerrar">Cerrar</button>';
+    d.appendChild(acc); $('cerrar').onclick=function(){ d.innerHTML=''; history.replaceState(null,'',location.pathname+location.search); };
+    history.replaceState(null,'',location.pathname+location.search+'#'+encodeURIComponent(id));
+    d.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  function cargar(){
+    $('cuenta').textContent='Cargando experimentos…'; $('grid').innerHTML=''; $('detalle').innerHTML='';
+    try{ localStorage.setItem('sabi_lab_grado', g); }catch(e){}
+    SabiJuegos.cargarExperimentos(g)
+      .then(function(lista){ datos=lista; pintar(); var h=decodeURIComponent(location.hash.slice(1)); if(h) abrir(h); })
+      .catch(function(){ datos=[]; $('cuenta').textContent='No se pudo cargar el laboratorio de '+NOMBRES[g]+'. Revisa tu conexión.'; });
+  }
+  $('grado').onchange=function(){ g=parseInt(this.value,10); history.replaceState(null,'',location.pathname+location.search); url(); cargar(); };
+  $('ejes').onclick=function(ev){ var b=ev.target.closest('.chip'); if(!b) return; eje=b.dataset.e; this.querySelectorAll('.chip').forEach(function(c){c.setAttribute('aria-pressed',String(c===b));}); url(); pintar(); };
+  $('buscar').oninput=pintar; $('soloBajo').onchange=pintar;
+  $('grid').onclick=function(ev){ var c=ev.target.closest('.card'); if(c) abrir(c.dataset.id); };
+  $('azar').onclick=function(){ var l=filtrados(); if(l.length) abrir(l[Math.floor(Math.random()*l.length)].id); };
+  url(); cargar();
+})();
+</script>
+</body>
+</html>

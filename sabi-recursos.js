@@ -534,5 +534,7 @@
     });
   }
 
-  window.SabiRecursos = { extraer: extraer, montar: montar, crear: crear, estilos: estilos, mazo: mazo, repasos: repasos, pendientes: pendientes, compilar: compilar, armarCrucigrama: armarCrucigrama };
+  function registrar(tipo, fn, nombre) { RENDER[tipo] = fn; if (nombre) NOMBRES[tipo] = nombre; }
+  window.SabiRecursos = { extraer: extraer, montar: montar, crear: crear, estilos: estilos, mazo: mazo, repasos: repasos, pendientes: pendientes, compilar: compilar, armarCrucigrama: armarCrucigrama,
+    registrar: registrar, util: { esc: esc, el: el, caja: caja, norm: norm, guardar: guardar, leer: leer, descargarSVG: descargarSVG, avatar: avatar, C: C, SERIE: SERIE } };
 })();
