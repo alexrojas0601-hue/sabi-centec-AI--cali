@@ -1,0 +1,8 @@
+{
+ "rol": "estudiante",
+ "texto": "Aprender con SABI",
+ "excluir": [
+  "SABI_CORRECCION_AVATAR_UI/"
+ ],
+ "reglas": []
+}
