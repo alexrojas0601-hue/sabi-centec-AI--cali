@@ -1,8 +1,22 @@
 <!DOCTYPE html>
+<!--
+  SABI CENTEC · https://sabicentec.com
+  © 2025-2026 SABI CENTEC. Titulares: Alexander Rojas Zamorano, Paula Andrea Rojas Cairasco y Daniela Rojas Cairasco.
+  Obra protegida. Todos los derechos reservados. Prohibida su copia, reproducción,
+  modificación o republicación total o parcial sin autorización escrita
+  (Ley 23 de 1982, Decisión Andina 351 de 1993). Ver LICENSE.
+-->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="author" content="Alexander Rojas Zamorano, Paula Andrea Rojas Cairasco y Daniela Rojas Cairasco">
+<meta name="copyright" content="© 2025-2026 SABI CENTEC · Alexander Rojas Zamorano, Paula Andrea Rojas Cairasco y Daniela Rojas Cairasco. Todos los derechos reservados.">
+<meta name="rights" content="Obra protegida · Prohibida su copia o reproducción sin autorización escrita">
+<meta name="robots" content="noai, noimageai">
+<meta property="og:site_name" content="SABI CENTEC">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "AI CENTEC · SABI CENTEC", "url": "https://ai.sabicentec.com", "copyrightYear": 2026, "copyrightNotice": "© 2025-2026 SABI CENTEC. Todos los derechos reservados.", "license": "https://ai.sabicentec.com/LICENSE", "copyrightHolder": [{"@type": "Organization", "name": "SABI CENTEC", "url": "https://sabicentec.com"}, {"@type": "Person", "name": "Alexander Rojas Zamorano"}, {"@type": "Person", "name": "Paula Andrea Rojas Cairasco"}, {"@type": "Person", "name": "Daniela Rojas Cairasco"}], "author": [{"@type": "Person", "name": "Alexander Rojas Zamorano"}, {"@type": "Person", "name": "Paula Andrea Rojas Cairasco"}, {"@type": "Person", "name": "Daniela Rojas Cairasco"}], "publisher": {"@type": "Organization", "name": "SABI CENTEC", "url": "https://sabicentec.com"}}</script>
+<script src="/assets/sabi-proteccion.js"></script>
   <title>SABI AI. CENTEC CALI</title>
   <style>
     :root{--azul:#073B7A;--azul2:#064FAE;--naranja:#FF8A00;--amarillo:#FFD43B;--fondo:#F6F9FF;--texto:#132033;--borde:#D8E6F8;--suave:#EFF6FF;--verde:#138A52;--gris:#64748B}
@@ -80,5 +94,6 @@ window.addEventListener('offline',()=>estado.textContent='Modo offline');
 try{if('serviceWorker' in navigator){const sw="self.addEventListener('install',e=>{e.waitUntil(caches.open('sabi-ai-v2').then(c=>c.addAll(['./'])));self.skipWaiting();});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).catch(()=>caches.match(e.request).then(r=>r||caches.match('./'))));});";const blob=new Blob([sw],{type:'text/javascript'});navigator.serviceWorker.register(URL.createObjectURL(blob));}}catch(e){}
 </script>
 <script src="https://superacion.sabicentec.com/sabi-puerta.js" data-rol="estudiante" data-texto="Aprender con SABI" defer></script>
+<div class="sabi-derechos" style="font-size:12px;color:#7a8499;text-align:center;padding:10px 16px;line-height:1.5">© 2025-2026 SABI CENTEC · Alexander Rojas Zamorano, Paula Andrea Rojas Cairasco y Daniela Rojas Cairasco · Todos los derechos reservados · Prohibida su copia o reproducción</div>
 </body>
 </html>

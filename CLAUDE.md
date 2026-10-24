@@ -20,3 +20,9 @@ Los agentes de esta app están en `AGENTES-IA.md`; respétalos y mantenlos coher
 - No romper lo que funciona: probar en navegador, en computador y en celular, sin errores de JavaScript.
 - Aplicar `/factcheck` y `/selfcheck`, y que un Dot auditor distinto de quien creó el contenido lo revise.
 - Commit en español que diga qué cambió; Cloudflare despliega desde GitHub. Verificar que el despliegue terminó.
+
+## Propiedad y protección (no quitar)
+- Titulares: **SABI CENTEC — Alexander Rojas Zamorano, Paula Andrea Rojas Cairasco y Daniela Rojas Cairasco**. Licencia propietaria en `LICENSE` (todos los derechos reservados, no es código abierto).
+- Cada HTML servido lleva: comentario de derechos tras `<!doctype html>`, metas `author`/`copyright`/`rights`/`robots noai`, JSON-LD con `copyrightHolder` y `author` (los tres titulares y SABI CENTEC) y el pie «© 2025-2026 SABI CENTEC · … · Todos los derechos reservados · Prohibida su copia o reproducción». Toda página nueva debe llevarlos.
+- `assets/sabi-proteccion.js` (cargado en el `<head>` de las páginas públicas): bloquea marcos ajenos, muestra «Copia no autorizada» fuera de *.sabicentec.com, protege imágenes, desactiva Ctrl+S/Ctrl+U y agrega la fuente a textos largos copiados. Es solo disuasivo: la protección real es el aviso legal + el registro ante la DNDA + el repositorio privado.
+- `_headers` (cabeceras de Cloudflare: nosniff, `frame-ancestors`, `X-Robots-Tag: noai`) y `robots.txt` (bloquea bots de IA y copiadores). No agregar una CSP completa de recursos: la app usa APIs y CDN externos.
