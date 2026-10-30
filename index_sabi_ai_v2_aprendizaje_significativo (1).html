@@ -80,5 +80,6 @@ window.addEventListener('offline',()=>estado.textContent='Modo offline');
 try{if('serviceWorker' in navigator){const sw="self.addEventListener('install',e=>{e.waitUntil(caches.open('sabi-ai-v2').then(c=>c.addAll(['./'])));self.skipWaiting();});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).catch(()=>caches.match(e.request).then(r=>r||caches.match('./'))));});";const blob=new Blob([sw],{type:'text/javascript'});navigator.serviceWorker.register(URL.createObjectURL(blob));}}catch(e){}
 </script>
 <script src="https://superacion.sabicentec.com/sabi-puerta.js" data-rol="estudiante" data-texto="Aprender con SABI" defer></script>
+<script src="https://sabicentec.com/assets/sabi-barra.js" defer data-app="ai-centec" data-destino="https://sabicentec.com/" data-posicion="abajo-izquierda" data-adjuntar="no"></script>
 </body>
 </html>
